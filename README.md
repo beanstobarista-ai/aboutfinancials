@@ -1,6 +1,6 @@
-# About Financials — local prototype
+# About Financials
 
-Static pages for a future aboutfinancials.com. Nothing here talks to WordPress or the live domain.
+Static source for aboutfinancials.com. The production site is hosted on a Hostinger VPS and is deployed manually through CloudPanel; changes in this repository are not published automatically.
 
 ## Open it
 
@@ -25,8 +25,24 @@ Figures were copied from public APIs while this folder was built (3 October 2026
 
 Rounded labels (trillions, two-decimal percents) are for reading. The exact source value is in the line under the figure and in the element’s title.
 
+## Verify the embedded data
+
+Run the read-only source verifier before reviewing a data update:
+
+```bash
+node scripts/verify-data.mjs
+```
+
+It checks every embedded latest World Bank observation, every stored history point, the dated ECB/Frankfurter exchange-rate snapshot, and—while the same source week remains available—the Forex Factory calendar snapshot. It reports source-valid but stale World Bank observations as warnings and exits unsuccessfully when a stored value does not match its named source.
+
+The rebuild script is portable across Windows, macOS, and Linux. It rewrites `js/data.js`, so use it only when intentionally preparing a reviewed data refresh:
+
+```bash
+node scripts/rebuild-data.mjs
+```
+
 ## What is not built
 
-- No deploy to the live WordPress site.
+- No automatic deployment to the live site.
 - No economic calendar that updates by itself, and no actuals beyond what the weekly file contained.
 - No streaming market quotes, accounts, or news. History charts are static SVG from the embedded World Bank series above, not a chart library.

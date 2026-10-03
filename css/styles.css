@@ -468,4 +468,5 @@ td .exact { display: block; margin-top: 3px; font-size: 12px; }
 }
 
 .diagram { margin: 8px 0 28px; }
-.diagram img { width: 100%; height: auto; display: block; }
+.diagram img,
+.diagram svg { width: 100%; height: auto; display: block; }

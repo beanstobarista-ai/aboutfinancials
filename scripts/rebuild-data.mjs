@@ -1,12 +1,19 @@
 import fs from "fs";
 import https from "https";
 import http from "http";
+import os from "os";
+import path from "path";
+import vm from "vm";
+import { fileURLToPath } from "url";
 
-const ROOT = "/workspace/aboutfinancials";
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OLD = fs.readFileSync(`${ROOT}/js/data.js`, "utf8");
-const window = {};
-eval(OLD);
+const context = vm.createContext({ window: {} });
+vm.runInContext(OLD, context, { filename: `${ROOT}/js/data.js`, timeout: 5000 });
+const { window } = context;
 const prev = window.AF;
+const REPORT_DIR = path.join(os.tmpdir(), "aboutfinancials-fetch");
+fs.mkdirSync(REPORT_DIR, { recursive: true });
 
 const EXISTING = ["SA", "US", "CN", "DE", "IN", "JP", "GB"];
 const ADD = ["AE", "FR", "KR", "BR", "CA", "AU", "ZA", "TR", "ID", "MX"];
@@ -269,7 +276,7 @@ async function main() {
 
   const out = `/* Embedded at build time from public APIs. Figures are copied from those responses, not estimated. */\nwindow.AF = ${JSON.stringify(AF, null, 2)};\n`;
   fs.writeFileSync(`${ROOT}/js/data.js`, out);
-  fs.writeFileSync("/tmp/af-fetch/report.json", JSON.stringify(report, null, 2));
+  fs.writeFileSync(path.join(REPORT_DIR, "report.json"), JSON.stringify(report, null, 2));
 
   // Quick counts for SA/US history
   const histCounts = {
@@ -278,7 +285,7 @@ async function main() {
     US_gdp: AF.history["NY.GDP.MKTP.KD.ZG"].US.length,
     US_cpi: AF.history["FP.CPI.TOTL.ZG"].US.length,
   };
-  fs.writeFileSync("/tmp/af-fetch/hist.json", JSON.stringify(histCounts, null, 2));
+  fs.writeFileSync(path.join(REPORT_DIR, "hist.json"), JSON.stringify(histCounts, null, 2));
   console.log(JSON.stringify({ report, histCounts, countryCount: countries.length }, null, 2));
 }
 
