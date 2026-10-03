@@ -19,6 +19,13 @@
     return AF.countries.find(function (item) { return item.code === code; });
   }
 
+  function countryHay(country) {
+    return [country.name, country.code, country.iso3 || ""]
+      .concat(country.aliases || [])
+      .join(" ")
+      .toLowerCase();
+  }
+
   function longDate(iso) {
     var parts = String(iso).slice(0, 10).split("-");
     return Number(parts[2]) + " " + MONTHS[Number(parts[1]) - 1] + " " + parts[0];
@@ -108,7 +115,10 @@
     }
     var grid = document.getElementById("snap-grid");
     if (grid) {
-      AF.countries.forEach(function (country) {
+      var featured = (AF.featuredCountryCodes || AF.countries.map(function (country) { return country.code; }))
+        .map(countryByCode)
+        .filter(Boolean);
+      featured.forEach(function (country) {
         grid.appendChild(snapCard(country));
       });
       setupCountryFilter();
@@ -124,7 +134,7 @@
     var card = el("a", "card snap");
     card.href = "country.html?c=" + country.code;
     card.setAttribute("data-country", country.code);
-    card.setAttribute("data-hay", (country.name + " " + country.code + " " + country.aliases.join(" ")).toLowerCase());
+    card.setAttribute("data-hay", countryHay(country));
     card.appendChild(el("span", "code", country.code));
     card.appendChild(el("h3", null, country.name));
     var dl = document.createElement("dl");
@@ -188,7 +198,7 @@
         title: country.name,
         kind: "Country",
         href: "country.html?c=" + country.code,
-        hay: (country.name + " " + country.code + " " + country.aliases.join(" ")).toLowerCase()
+        hay: countryHay(country)
       });
     });
     AF.indicators.forEach(function (indicator) {
@@ -299,7 +309,7 @@
     var published = AF.countries.filter(function (country) {
       return AF.series[indicator.id][country.code].value != null;
     }).length;
-    card.appendChild(el("p", "src", "World Bank series " + indicator.id + " \u00b7 " + indicator.officialName + ". Published for " + published + " of " + AF.countries.length + " countries in the latest observation."));
+    card.appendChild(el("p", "src", "World Bank series " + indicator.id + " \u00b7 " + indicator.officialName + ". Published for " + published + " of " + AF.countries.length + " countries and economies in the latest observation."));
     var scroll = el("div", "table-scroll");
     var table = document.createElement("table");
     var caption = document.createElement("caption");
@@ -324,7 +334,9 @@
       var figCell = document.createElement("td");
       if (obs.value == null) {
         var missing = el("span", "fig missing", "Not published");
-        missing.title = "World Bank returned no value for the " + obs.date + " observation. Not zero, and not estimated.";
+        missing.title = obs.date
+          ? "World Bank returned no value for the " + obs.date + " observation. Not zero, and not estimated."
+          : "World Bank returned no dated observation. Not zero, and not estimated.";
         figCell.appendChild(missing);
       } else {
         var fig = el("span", "fig", formatNumber(indicator, obs.value));
@@ -374,7 +386,9 @@
       var missing = el("p", "fig missing", "Not published");
       card.appendChild(missing);
       card.appendChild(el("p", "plain", indicator.plain));
-      card.appendChild(el("p", "exact", obs ? "World Bank returned no value for " + obs.date + ". Series " + indicator.id + "." : "No row."));
+      card.appendChild(el("p", "exact", obs && obs.date
+        ? "World Bank returned no value for " + obs.date + ". Series " + indicator.id + "."
+        : "World Bank returned no dated row. Series " + indicator.id + "."));
       return card;
     }
     var fig = el("p", "fig", formatNumber(indicator, obs.value));
@@ -518,17 +532,59 @@
       var country = countryByCode(code);
       if (!country) {
         root.appendChild(el("p", "kicker", "Countries"));
-        root.appendChild(el("h1", null, "Choose a country"));
-        root.appendChild(el("p", "lede", AF.countries.length + " economies are in this snapshot. Germany and France each appear on their own."));
-        var picker = el("div", "picker");
-        AF.countries.forEach(function (item) {
-          var link = el("a", "card");
-          link.href = "country.html?c=" + item.code;
-          link.appendChild(el("span", "code", item.code));
-          link.appendChild(el("strong", null, item.name));
-          picker.appendChild(link);
+        root.appendChild(el("h1", null, "Choose a country or economy"));
+        root.appendChild(el("p", "lede", AF.countries.length + " individual countries and economies are in the World Bank directory. Regional and income-group aggregates are excluded."));
+
+        var filter = el("div", "country-filter directory-filter");
+        var label = el("label", "sr-only", "Filter countries and economies");
+        label.setAttribute("for", "directory-q");
+        var input = document.createElement("input");
+        input.id = "directory-q";
+        input.type = "search";
+        input.placeholder = "Search by name or code";
+        input.autocomplete = "off";
+        filter.appendChild(label);
+        filter.appendChild(input);
+        root.appendChild(filter);
+
+        var directory = el("div", "region-directory");
+        root.appendChild(directory);
+
+        function renderDirectory(query) {
+          directory.innerHTML = "";
+          var matches = AF.countries.filter(function (item) {
+            return !query || countryHay(item).indexOf(query) !== -1;
+          });
+          var regions = [];
+          matches.forEach(function (item) {
+            var region = item.region || "Other";
+            if (regions.indexOf(region) === -1) regions.push(region);
+          });
+          regions.sort();
+          regions.forEach(function (region) {
+            var section = el("section", "region-block");
+            section.appendChild(el("h2", "group-title", region));
+            var picker = el("div", "picker");
+            matches.filter(function (item) {
+              return (item.region || "Other") === region;
+            }).forEach(function (item) {
+              var link = el("a", "card country-link");
+              link.href = "country.html?c=" + item.code;
+              link.appendChild(el("span", "code", item.code));
+              link.appendChild(el("strong", null, item.name));
+              if (item.capitalCity) link.appendChild(el("span", "country-meta", item.capitalCity));
+              picker.appendChild(link);
+            });
+            section.appendChild(picker);
+            directory.appendChild(section);
+          });
+          if (!matches.length) directory.appendChild(el("p", "card empty-state", "No country or economy matches that search."));
+        }
+
+        renderDirectory("");
+        input.addEventListener("input", function () {
+          renderDirectory(input.value.trim().toLowerCase());
         });
-        root.appendChild(picker);
         document.title = "Countries · About Financials";
         return;
       }
@@ -536,7 +592,9 @@
       var hero = el("header", "country-hero");
       hero.appendChild(el("p", "kicker", country.code));
       hero.appendChild(el("h1", null, country.name));
-      hero.appendChild(el("p", "lede", country.note || "Annual World Bank figures for this country. Each card names the series and the year of the observation."));
+      var context = [country.region, country.incomeLevel].filter(Boolean).join(" · ");
+      hero.appendChild(el("p", "lede", country.note || "Annual World Bank figures for this country or economy. Each card names the series and the year of the observation."));
+      if (context) hero.appendChild(el("p", "note", "World Bank classification: " + context + "."));
       var back = el("p", "note");
       var backLink = el("a", null, "All indicators");
       backLink.href = "indicators.html";

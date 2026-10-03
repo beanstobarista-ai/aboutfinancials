@@ -18,7 +18,7 @@ function loadData() {
   return context.window.AF;
 }
 
-async function fetchJson(url) {
+async function fetchJson(url, attempt = 0) {
   let response;
   try {
     response = await fetch(url, {
@@ -27,6 +27,14 @@ async function fetchJson(url) {
     });
   } catch (error) {
     throw new Error(`Request failed for ${url}: ${error.message}`, { cause: error });
+  }
+  if ((response.status === 429 || response.status >= 500) && attempt < 3) {
+    const retryAfter = Number(response.headers.get("retry-after"));
+    const delay = Number.isFinite(retryAfter) && retryAfter > 0
+      ? Math.min(retryAfter * 1000, 10_000)
+      : 1000 * (attempt + 1);
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    return fetchJson(url, attempt + 1);
   }
   const body = await response.text();
   let json;
@@ -47,6 +55,27 @@ function iso2(row) {
 function sameValue(a, b) {
   if (a == null || b == null) return a == null && b == null;
   return String(a) === String(b);
+}
+
+async function mapLimit(items, limit, mapper) {
+  let next = 0;
+  async function worker() {
+    while (next < items.length) {
+      const index = next++;
+      await mapper(items[index], index);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+}
+
+async function worldBankRows(codes, indicatorId, query) {
+  const url = `${WORLD_BANK_ROOT}/country/all/indicator/${indicatorId}?format=json&${query}`;
+  const payload = await fetchJson(url);
+  if (!Array.isArray(payload) || !Array.isArray(payload[1])) {
+    throw new Error(`Unexpected World Bank response for ${indicatorId}`);
+  }
+  const allowed = new Set(codes);
+  return payload[1].filter((row) => allowed.has(iso2(row)));
 }
 
 function eventKey(event) {
@@ -81,20 +110,36 @@ function checkShape(AF, failures) {
   }
 }
 
+async function verifyCountryList(AF, failures, counts) {
+  const url = `${WORLD_BANK_ROOT}/country?format=json&per_page=400`;
+  const payload = await fetchJson(url);
+  const rows = Array.isArray(payload) && Array.isArray(payload[1]) ? payload[1] : [];
+  const individuals = rows.filter((row) => row.region?.id !== "NA" && row.iso2Code?.length === 2);
+  const source = new Map(individuals.map((row) => [row.iso2Code.toUpperCase(), row]));
+  if (AF.countries.length !== individuals.length) {
+    failures.push(`Country directory count differs: stored ${AF.countries.length}, source ${individuals.length}`);
+  }
+  for (const country of AF.countries) {
+    const row = source.get(country.code);
+    if (!row) {
+      failures.push(`Country directory entry ${country.code} is not an individual World Bank economy`);
+      continue;
+    }
+    if (country.name !== row.name.trim() || country.iso3 !== row.id || country.region !== row.region.value.trim()) {
+      failures.push(`Country directory metadata does not match World Bank for ${country.code}`);
+      continue;
+    }
+    counts.countryList += 1;
+  }
+}
+
 async function verifyWorldBank(AF, failures, warnings, counts) {
   const codes = AF.countries.map((country) => country.code);
-  const joined = codes.join(";");
-
-  await Promise.all(AF.indicators.map(async (indicator) => {
-    const url = `${WORLD_BANK_ROOT}/country/${joined}/indicator/${indicator.id}?format=json&mrv=1&per_page=500`;
-    const payload = await fetchJson(url);
-    if (!Array.isArray(payload) || !Array.isArray(payload[1])) {
-      failures.push(`Unexpected World Bank response for ${indicator.id}`);
-      return;
-    }
+  await mapLimit(AF.indicators, 3, async (indicator) => {
+    const rows = await worldBankRows(codes, indicator.id, "mrv=1&per_page=500");
 
     const latest = new Map();
-    for (const row of payload[1]) {
+    for (const row of rows) {
       const code = iso2(row);
       if (code) latest.set(code, row);
     }
@@ -130,12 +175,10 @@ async function verifyWorldBank(AF, failures, warnings, counts) {
         warnings.push(`${indicator.id}/${code} is source-valid but no longer matches the latest World Bank row`);
       }
     }
-  }));
+  });
 
-  await Promise.all(Object.entries(AF.history || {}).map(async ([indicatorId, countries]) => {
-    const url = `${WORLD_BANK_ROOT}/country/${joined}/indicator/${indicatorId}?format=json&mrv=20&per_page=1000`;
-    const payload = await fetchJson(url);
-    const rows = Array.isArray(payload) && Array.isArray(payload[1]) ? payload[1] : [];
+  await mapLimit(Object.entries(AF.history || {}), 2, async ([indicatorId, countries]) => {
+    const rows = await worldBankRows(codes, indicatorId, "mrv=20&per_page=10000");
     const source = new Map();
     for (const row of rows) {
       const code = iso2(row);
@@ -151,7 +194,7 @@ async function verifyWorldBank(AF, failures, warnings, counts) {
         }
       }
     }
-  }));
+  });
 }
 
 async function verifyFx(AF, failures, counts) {
@@ -169,7 +212,16 @@ async function verifyFx(AF, failures, counts) {
 }
 
 async function verifyCalendar(AF, failures, warnings, counts) {
-  const source = await fetchJson(CALENDAR_URL);
+  let source;
+  try {
+    source = await fetchJson(CALENDAR_URL);
+  } catch (error) {
+    if (String(error.message).includes("(429)")) {
+      warnings.push("Calendar source verification deferred because the weekly endpoint returned HTTP 429 after bounded retries");
+      return;
+    }
+    throw error;
+  }
   if (!Array.isArray(source)) {
     failures.push("Forex Factory weekly endpoint did not return an array");
     return;
@@ -197,11 +249,12 @@ async function main() {
   const AF = loadData();
   const failures = [];
   const warnings = [];
-  const counts = { worldBank: 0, history: 0, fx: 0, calendar: 0 };
+  const counts = { countryList: 0, worldBank: 0, history: 0, fx: 0, calendar: 0 };
 
   checkShape(AF, failures);
   await Promise.all([
     verifyWorldBank(AF, failures, warnings, counts),
+    verifyCountryList(AF, failures, counts),
     verifyFx(AF, failures, counts),
     verifyCalendar(AF, failures, warnings, counts),
   ]);

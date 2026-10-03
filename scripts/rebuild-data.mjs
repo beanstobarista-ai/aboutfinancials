@@ -15,11 +15,9 @@ const prev = window.AF;
 const REPORT_DIR = path.join(os.tmpdir(), "aboutfinancials-fetch");
 fs.mkdirSync(REPORT_DIR, { recursive: true });
 
-const EXISTING = ["SA", "US", "CN", "DE", "IN", "JP", "GB"];
-const ADD = ["AE", "FR", "KR", "BR", "CA", "AU", "ZA", "TR", "ID", "MX"];
-const ALL_CODES = [...EXISTING, ...ADD];
+const FEATURED_CODES = ["SA", "US", "CN", "DE", "IN", "JP", "GB", "AE", "FR", "KR", "BR", "CA", "AU", "ZA", "TR", "ID", "MX"];
 
-const META = {
+const EXTRA_ALIASES = {
   SA: { name: "Saudi Arabia", aliases: ["saudi", "ksa", "riyadh"] },
   US: { name: "United States", aliases: ["usa", "america", "united states"] },
   CN: { name: "China", aliases: ["china", "chinese"] },
@@ -37,10 +35,37 @@ const META = {
   TR: { name: "Türkiye", aliases: ["turkey", "turkiye", "türkiye"] },
   ID: { name: "Indonesia", aliases: ["indonesia"] },
   MX: { name: "Mexico", aliases: ["mexico"] },
+  BO: { aliases: ["bolivia"] },
+  BN: { aliases: ["brunei"] },
+  CD: { aliases: ["dr congo", "democratic republic of the congo"] },
+  CG: { aliases: ["republic of the congo", "congo brazzaville"] },
+  CI: { aliases: ["ivory coast", "cote d'ivoire"] },
+  CV: { aliases: ["cape verde"] },
+  CZ: { aliases: ["czech republic"] },
+  FM: { aliases: ["micronesia"] },
+  LA: { aliases: ["laos"] },
+  MD: { aliases: ["moldova"] },
+  MM: { aliases: ["burma"] },
+  MK: { aliases: ["north macedonia", "macedonia"] },
+  PS: { aliases: ["palestine", "palestinian territories"] },
+  RU: { aliases: ["russia"] },
+  SZ: { aliases: ["eswatini", "swaziland"] },
+  SY: { aliases: ["syria"] },
+  TL: { aliases: ["east timor", "timor leste"] },
+  TZ: { aliases: ["tanzania"] },
+  VE: { aliases: ["venezuela"] },
+  VN: { aliases: ["vietnam"] },
 };
 
 const INDICATOR_IDS = prev.indicators.map((i) => i.id);
+const INDICATORS = prev.indicators.map((indicator) => {
+  if (indicator.id === "FR.INR.RINR") {
+    return { ...indicator, plain: "A lending rate after inflation, where the World Bank publishes a latest observation." };
+  }
+  return indicator;
+});
 const HISTORY_IDS = ["NY.GDP.MKTP.KD.ZG", "FP.CPI.TOTL.ZG"];
+let ISO3_TO_ISO2 = {};
 
 function fetchJson(url) {
   return new Promise((resolve, reject) => {
@@ -67,31 +92,64 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+async function mapLimit(items, limit, mapper) {
+  let next = 0;
+  async function worker() {
+    while (next < items.length) {
+      const index = next++;
+      await mapper(items[index], index);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+}
+
 async function wbCountryIndicator(codes, indicatorId, { mrv = 1, perPage = 200 } = {}) {
-  const joined = codes.join(";");
-  const url = `https://api.worldbank.org/v2/country/${joined}/indicator/${indicatorId}?format=json&mrv=${mrv}&per_page=${perPage}`;
+  const url = `https://api.worldbank.org/v2/country/all/indicator/${indicatorId}?format=json&mrv=${mrv}&per_page=${perPage}`;
   const res = await fetchJson(url);
   if (res.status !== 200 || !Array.isArray(res.json) || !res.json[1]) {
-    throw new Error(`WB fail ${indicatorId} ${res.status} ${String(res.body).slice(0, 200)}`);
+    throw new Error(`WB fail ${indicatorId} ${res.status} ${url} ${String(res.body).slice(0, 200)}`);
   }
-  return res.json[1];
+  const allowed = new Set(codes);
+  return res.json[1].filter((row) => allowed.has(iso2FromRow(row)));
 }
 
 function iso2FromRow(row) {
   // World Bank country.id is ISO2 for countries
   const id = row.country && row.country.id;
   if (id && id.length === 2) return id.toUpperCase();
-  // fallback via iso3
-  const map3 = {
-    SAU: "SA", USA: "US", CHN: "CN", DEU: "DE", IND: "IN", JPN: "JP", GBR: "GB",
-    ARE: "AE", FRA: "FR", KOR: "KR", BRA: "BR", CAN: "CA", AUS: "AU", ZAF: "ZA",
-    TUR: "TR", IDN: "ID", MEX: "MX",
-  };
-  return map3[row.countryiso3code] || null;
+  return ISO3_TO_ISO2[row.countryiso3code] || null;
+}
+
+async function worldBankCountries() {
+  const url = "https://api.worldbank.org/v2/country?format=json&per_page=400";
+  const res = await fetchJson(url);
+  if (res.status !== 200 || !Array.isArray(res.json) || !Array.isArray(res.json[1])) {
+    throw new Error(`World Bank country list failed ${res.status}`);
+  }
+  const rows = res.json[1].filter((row) => {
+    return row.region && row.region.id !== "NA" && row.iso2Code && row.iso2Code.length === 2;
+  });
+  return rows.map((row) => {
+    const code = row.iso2Code.toUpperCase();
+    const configured = EXTRA_ALIASES[code];
+    const aliases = configured ? configured.aliases : [];
+    return {
+      code,
+      iso3: row.id,
+      name: row.name.trim(),
+      aliases,
+      region: row.region.value.trim(),
+      incomeLevel: row.incomeLevel && row.incomeLevel.value !== "Not classified" ? row.incomeLevel.value.trim() : null,
+      capitalCity: row.capitalCity ? row.capitalCity.trim() : null,
+    };
+  }).sort((a, b) => a.name.localeCompare(b.name, "en"));
 }
 
 async function main() {
-  const report = { added: [], failed: [], kept: [...EXISTING], fxDate: null, sar: false, calendarRefreshed: false };
+  const countries = await worldBankCountries();
+  const ALL_CODES = countries.map((country) => country.code);
+  ISO3_TO_ISO2 = Object.fromEntries(countries.map((country) => [country.iso3, country.code]));
+  const report = { countryCount: countries.length, missingAllValues: [], fxDate: null, sar: false, calendarRefreshed: false };
 
   // --- Snapshot series ---
   const series = {};
@@ -100,14 +158,12 @@ async function main() {
     for (const code of ALL_CODES) series[id][code] = null; // placeholder
   }
 
-  for (const id of INDICATOR_IDS) {
+  await mapLimit(INDICATOR_IDS, 3, async (id) => {
     process.stderr.write(`snapshot ${id}\n`);
-    const rows = await wbCountryIndicator(ALL_CODES, id, { mrv: 1, perPage: 100 });
-    const seen = new Set();
+    const rows = await wbCountryIndicator(ALL_CODES, id, { mrv: 1, perPage: 1000 });
     for (const row of rows) {
       const code = iso2FromRow(row);
       if (!code || !ALL_CODES.includes(code)) continue;
-      seen.add(code);
       // value may be null; still store year
       const year = String(row.date);
       const value = row.value == null ? null : String(row.value);
@@ -120,36 +176,23 @@ async function main() {
       }
     }
     await sleep(120);
-  }
+  });
 
-  // Decide which new countries to keep: World Bank returned at least one non-null across the indicator set, OR returned any row with a year
-  const countries = [];
+  // Keep every individual country/economy in the World Bank directory, including those with no values.
   for (const code of ALL_CODES) {
-    const hasAnyRow = INDICATOR_IDS.some((id) => series[id][code] && series[id][code].date != null);
     const hasAnyValue = INDICATOR_IDS.some((id) => series[id][code] && series[id][code].value != null);
-    if (EXISTING.includes(code)) {
-      countries.push({ code, name: META[code].name, aliases: META[code].aliases });
-      continue;
-    }
-    if (hasAnyRow || hasAnyValue) {
-      countries.push({ code, name: META[code].name, aliases: META[code].aliases });
-      report.added.push(code + (hasAnyValue ? "" : " (rows but all null)"));
-    } else {
-      report.failed.push(code);
-      // strip from series
-      for (const id of INDICATOR_IDS) delete series[id][code];
-    }
+    if (!hasAnyValue) report.missingAllValues.push(code);
   }
 
-  const keptCodes = countries.map((c) => c.code);
+  const keptCodes = ALL_CODES;
 
   // --- History ---
   const history = {};
-  for (const id of HISTORY_IDS) {
+  await mapLimit(HISTORY_IDS, 2, async (id) => {
     history[id] = {};
     process.stderr.write(`history ${id}\n`);
     // mrv=20 to have spare nulls; we keep up to 15 non-null years
-    const rows = await wbCountryIndicator(keptCodes, id, { mrv: 20, perPage: 500 });
+    const rows = await wbCountryIndicator(keptCodes, id, { mrv: 20, perPage: 10000 });
     const byCode = {};
     for (const code of keptCodes) byCode[code] = [];
     for (const row of rows) {
@@ -166,7 +209,7 @@ async function main() {
       history[id][code] = pts.slice(-15);
     }
     await sleep(150);
-  }
+  });
 
   // --- FX ---
   process.stderr.write("fx\n");
@@ -252,8 +295,9 @@ async function main() {
     builtAt,
     builtAtLabel,
     countries,
+    featuredCountryCodes: FEATURED_CODES.filter((code) => keptCodes.includes(code)),
     categories: prev.categories,
-    indicators: prev.indicators,
+    indicators: INDICATORS,
     series,
     history,
     fx: {
@@ -268,6 +312,7 @@ async function main() {
     },
     calendar,
     sources: {
+      countryList: "World Bank Countries API v2 (individual countries/economies; aggregate regions and income groups excluded)",
       worldBank: "World Bank World Development Indicators API v2 (format=json, mrv=1 for snapshot; history for GDP growth and inflation)",
       fx: "Frankfurter / European Central Bank reference rates",
       calendar: "Forex Factory weekly JSON (nfs.faireconomy.media), snapshot only",
