@@ -12,7 +12,7 @@ python3 -m http.server 8765
 
 Then open http://127.0.0.1:8765
 
-The pages are plain HTML, one shared stylesheet (`css/styles.css`), and two scripts (`js/data.js`, `js/app.js`). Search, tables, country pages, history charts, the calendar, Company Intelligence, and the Business Plan Lab all run in the browser. There is no backend. The product direction and publication gates are recorded in [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md).
+The pages are plain HTML, one shared stylesheet (`css/styles.css`), and browser-side scripts. Search, tables, country pages, history charts, the calendar, Company Intelligence, and the Business Plan Lab all run in the browser. There is no backend. Company briefs use `js/company-data.js` and `js/company.js`; the product direction and publication gates are recorded in [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md).
 
 ## What is real
 
@@ -36,6 +36,14 @@ node scripts/verify-data.mjs
 
 It checks every embedded World Bank observation, every IMF WEO fallback, every stored history point, the dated ECB/Frankfurter exchange-rate snapshot, and—while the same source week remains available—the Forex Factory calendar snapshot. It reports newer upstream observations as warnings and exits unsuccessfully when a stored value does not match its named source.
 
+Verify Company Intelligence data and its internal reconciliations separately:
+
+```bash
+node scripts/verify-company-data.mjs
+```
+
+The company verifier reconciles segment totals, revenue groups and free cash flow, then checks every populated Amazon filing value against the filing-specific SEC document.
+
 The rebuild script is portable across Windows, macOS, and Linux. It rewrites `js/data.js`, so use it only when intentionally preparing a reviewed data refresh:
 
 ```bash
@@ -47,5 +55,5 @@ node scripts/rebuild-data.mjs
 - No automatic deployment to the live site.
 - No economic calendar that updates by itself, and no actuals beyond what the weekly file contained.
 - No streaming market quotes, accounts, or news. History charts are static SVG from the embedded World Bank series above, not a chart library.
-- Company Intelligence currently contains a reviewed research preview and reusable editorial structure, not complete investment research coverage.
+- Company Intelligence contains a complete pilot Amazon brief and reusable editorial structure. Alphabet and Apple remain research frameworks, not complete briefs.
 - Business Plan Lab currently contains model blueprints without financial outputs. A plan needs an approved geography, date, currency, operating format, assumptions, and source set before figures can be added.

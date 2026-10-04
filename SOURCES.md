@@ -66,6 +66,7 @@ The initial Company Intelligence research preview uses these filing-specific pri
 
 - Alphabet Q3 2025 Form 10-Q: `https://www.sec.gov/Archives/edgar/data/1652044/000165204425000091/goog-20250930.htm`.
 - Amazon 2025 Form 10-K: `https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm`.
+- Amazon Q2 2026 Form 10-Q: `https://www.sec.gov/Archives/edgar/data/1018724/000101872426000026/amzn-20260630.htm`.
 - Apple 2025 Form 10-K: `https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm`.
 - Microsoft 2025 Form 10-K: `https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm`.
 - Oracle 2025 Form 10-K: `https://www.sec.gov/Archives/edgar/data/1341439/000095017025087926/orcl-20250531.htm`.

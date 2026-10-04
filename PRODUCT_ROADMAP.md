@@ -25,7 +25,7 @@ Business plans separate external evidence, owner assumptions, and model results.
 - Preserve and improve the country and indicator source ledger.
 - Establish reusable Company Intelligence and Business Plan Lab page patterns.
 - Keep navigation among the existing economic pages and the new verticals obvious on mobile and desktop.
-- Pilot company research with Amazon, Alphabet, and Apple.
+- Publish the complete Amazon pilot brief; retain Alphabet and Apple as the next reviewed company briefs.
 - Pilot plan structures for a broiler chicken farm and a restaurant; select a geography before adding figures.
 
 ### Phase 2 — useful depth
@@ -51,4 +51,3 @@ Business plans separate external evidence, owner assumptions, and model results.
 ## Publication gates
 
 No production publication occurs without owner approval. Every release must pass source verification, link and console checks, responsive review, accessibility basics, and editorial review. Diagrams and generated pictorial explanations must be previewed and explicitly approved before inclusion.
-
