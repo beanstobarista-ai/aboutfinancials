@@ -12,7 +12,7 @@ python3 -m http.server 8765
 
 Then open http://127.0.0.1:8765
 
-The pages are plain HTML, one shared stylesheet (`css/styles.css`), and two scripts (`js/data.js`, `js/app.js`). Search, tables, country pages, history charts, and the calendar all run in the browser from the embedded file. There is no backend.
+The pages are plain HTML, one shared stylesheet (`css/styles.css`), and two scripts (`js/data.js`, `js/app.js`). Search, tables, country pages, history charts, the calendar, Company Intelligence, and the Business Plan Lab all run in the browser. There is no backend. The product direction and publication gates are recorded in [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md).
 
 ## What is real
 
@@ -47,3 +47,5 @@ node scripts/rebuild-data.mjs
 - No automatic deployment to the live site.
 - No economic calendar that updates by itself, and no actuals beyond what the weekly file contained.
 - No streaming market quotes, accounts, or news. History charts are static SVG from the embedded World Bank series above, not a chart library.
+- Company Intelligence currently contains a reviewed research preview and reusable editorial structure, not complete investment research coverage.
+- Business Plan Lab currently contains model blueprints without financial outputs. A plan needs an approved geography, date, currency, operating format, assumptions, and source set before figures can be added.

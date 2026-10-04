@@ -49,6 +49,41 @@ The IMF permits reuse and distribution of published statistical data with accura
 - Exchange rates: Frankfurter API values based on European Central Bank reference rates. These are dated reference rates, not live market quotes.
 - Economic calendar: a saved Forex Factory weekly public JSON file. It is a snapshot, not a live feed, and contains no released-actual field.
 
+## Public-company filings and accounting standards
+
+### US Securities and Exchange Commission EDGAR
+
+- Publisher: US Securities and Exchange Commission; underlying filings are submitted by the named registrant.
+- Source: filing-specific HTML documents in `https://www.sec.gov/Archives/edgar/data/`.
+- Usage terms and access policy: `https://www.sec.gov/about/webmaster-frequently-asked-questions` and `https://www.sec.gov/privacy`.
+- Update cadence: event-driven according to each registrant's filing obligations.
+- Geography: public-company analysis begins with SEC registrants; the issuer and reporting jurisdiction are identified in each brief.
+- Units: exactly as reported in the filing. Any scaling or ratio calculation must retain the raw filing values and calculation inputs.
+- Missing-data behavior: an omitted or unclear disclosure remains unavailable. No value is inferred from another company, period, or secondary summary.
+- Display status: `reported-fact` for a filing value, `calculation` for a reproducible AboutFinancials computation, `interpretation` for editorial analysis, and `scenario` for an explicitly hypothetical result.
+
+The initial Company Intelligence research preview uses these filing-specific primary sources:
+
+- Alphabet Q3 2025 Form 10-Q: `https://www.sec.gov/Archives/edgar/data/1652044/000165204425000091/goog-20250930.htm`.
+- Amazon 2025 Form 10-K: `https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm`.
+- Apple 2025 Form 10-K: `https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm`.
+- Microsoft 2025 Form 10-K: `https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm`.
+- Oracle 2025 Form 10-K: `https://www.sec.gov/Archives/edgar/data/1341439/000095017025087926/orcl-20250531.htm`.
+
+### Financial Accounting Standards Board
+
+- Publisher: Financial Accounting Standards Board.
+- Source: official standards and project materials at `https://fasb.org/`.
+- Purpose: accounting context and definitions, not company-specific financial values.
+- Update cadence: standards and project-specific amendments.
+- Missing-data behavior: an accounting conclusion is not published when the applicable facts or authoritative guidance have not been established.
+
+The initial lease-accounting explanation links to the official Topic 842 project materials at `https://fasb.org/projects/current-projects/leases-398331`.
+
+## Business Plan Lab source rule
+
+A business-plan blueprint contains no financial output until its geography, currency, reference date, scale, and operating model are specified. Each plan then receives its own source register covering official regulators and statistical publishers, documented supplier quotations, proposed contractual terms, and owner assumptions. External evidence, owner assumptions, and calculated model results are never combined under one label.
+
 ## Future candidates
 
 ILOSTAT, IMF topic datasets, UN National Accounts, OECD Global Revenue Statistics, and national statistical offices remain candidates for additional adapters. A candidate is not used until its definition, endpoint, terms, cadence, geography, unit, missing-data behavior, country-code mapping, and full-record verification are implemented and reviewed.
