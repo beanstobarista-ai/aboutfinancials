@@ -76,6 +76,49 @@
     return "Balanced";
   }
 
+  function sourceByKey(key) {
+    return key && AF.sourceCatalog ? AF.sourceCatalog[key] : null;
+  }
+
+  function sourceLabel(obs) {
+    var source = obs && sourceByKey(obs.sourceKey);
+    return source ? source.label : "Approved source";
+  }
+
+  function checkedSourceLabels(obs) {
+    var keys = obs && Array.isArray(obs.checkedSourceKeys) ? obs.checkedSourceKeys : [];
+    return keys.map(function (key) {
+      var source = sourceByKey(key);
+      return source ? source.label : key;
+    }).filter(Boolean);
+  }
+
+  function freshnessLabel(obs) {
+    if (!obs || !obs.date || !AF.builtAt) return "";
+    var age = Number(String(AF.builtAt).slice(0, 4)) - Number(obs.date);
+    if (!isFinite(age) || age <= 3) return "";
+    return age <= 6 ? "older observation" : "historical observation";
+  }
+
+  function observationMeta(obs) {
+    if (!obs || obs.value == null) return "";
+    var parts = [obs.date];
+    if (obs.status === "estimate") parts.push("estimate");
+    var freshness = freshnessLabel(obs);
+    if (freshness) parts.push(freshness);
+    parts.push(sourceLabel(obs));
+    return parts.join(" · ");
+  }
+
+  function exactSourceLine(indicator, obs) {
+    return observationMeta(obs) + " · source value " + exactGrouped(obs.value) + " · " + (obs.sourceSeries || indicator.id);
+  }
+
+  function unavailableText(obs) {
+    var labels = checkedSourceLabels(obs);
+    return "No numeric observation was found" + (labels.length ? " in " + labels.join(" or ") : " in the verified dataset") + ". Not zero.";
+  }
+
   function setupNav() {
     var page = document.body.getAttribute("data-page");
     var links = document.querySelectorAll(".nav-links a");
@@ -163,15 +206,15 @@
       var fig = slot.querySelector(".fig");
       var meta = slot.querySelector(".meta");
       if (!obs || obs.value == null) {
-        fig.textContent = "Not published";
+        fig.textContent = "Unavailable";
         fig.classList.add("missing");
-        meta.textContent = obs && obs.date ? ("No value in the " + obs.date + " World Bank row.") : "No row returned.";
+        meta.textContent = unavailableText(obs);
         return;
       }
       fig.textContent = formatNumber(indicator, obs.value);
       fig.title = "Source value " + exactGrouped(obs.value);
       var extra = signWord(indicator, obs.value);
-      meta.textContent = obs.date + " · " + indicator.short + (extra ? " · " + extra.toLowerCase() : "");
+      meta.textContent = observationMeta(obs) + " · " + indicator.short + (extra ? " · " + extra.toLowerCase() : "");
     });
   }
 
@@ -309,15 +352,23 @@
     var published = AF.countries.filter(function (country) {
       return AF.series[indicator.id][country.code].value != null;
     }).length;
-    card.appendChild(el("p", "src", "World Bank series " + indicator.id + " \u00b7 " + indicator.officialName + ". Published for " + published + " of " + AF.countries.length + " countries and economies in the latest observation."));
+    var sources = {};
+    AF.countries.forEach(function (country) {
+      var observation = AF.series[indicator.id][country.code];
+      if (observation.value == null) return;
+      var label = sourceLabel(observation) + (observation.status === "estimate" ? " estimates" : "");
+      sources[label] = (sources[label] || 0) + 1;
+    });
+    var sourceCounts = Object.keys(sources).map(function (label) { return sources[label] + " " + label; }).join("; ");
+    card.appendChild(el("p", "src", indicator.officialName + " · primary series " + indicator.id + ". Available for " + published + " of " + AF.countries.length + " countries and economies" + (sourceCounts ? ": " + sourceCounts + "." : ".")));
     var scroll = el("div", "table-scroll");
     var table = document.createElement("table");
     var caption = document.createElement("caption");
-    caption.textContent = "Rounded for reading. The line under each figure is the exact source value.";
+    caption.textContent = "Rounded for reading. Each figure keeps its source series, observation year, status, and exact source value.";
     table.appendChild(caption);
     var thead = document.createElement("thead");
     var hr = document.createElement("tr");
-    ["Country", "Latest figure", "Year"].forEach(function (label) {
+    ["Country", "Latest figure", "Year", "Source"].forEach(function (label) {
       hr.appendChild(el("th", null, label));
     });
     thead.appendChild(hr);
@@ -333,10 +384,8 @@
       tr.appendChild(name);
       var figCell = document.createElement("td");
       if (obs.value == null) {
-        var missing = el("span", "fig missing", "Not published");
-        missing.title = obs.date
-          ? "World Bank returned no value for the " + obs.date + " observation. Not zero, and not estimated."
-          : "World Bank returned no dated observation. Not zero, and not estimated.";
+        var missing = el("span", "fig missing", "Unavailable");
+        missing.title = unavailableText(obs);
         figCell.appendChild(missing);
       } else {
         var fig = el("span", "fig", formatNumber(indicator, obs.value));
@@ -344,10 +393,15 @@
         figCell.appendChild(fig);
         var word = signWord(indicator, obs.value);
         if (word) figCell.appendChild(el("span", "word", word));
-        figCell.appendChild(el("span", "exact", "Source value " + exactGrouped(obs.value)));
+        figCell.appendChild(el("span", "exact", "Source value " + exactGrouped(obs.value) + " · " + (obs.sourceSeries || indicator.id)));
       }
       tr.appendChild(figCell);
-      tr.appendChild(el("td", null, obs.date));
+      tr.appendChild(el("td", null, obs.date || "—"));
+      var sourceCell = el("td", "source-cell", obs.value == null ? "—" : sourceLabel(obs));
+      if (obs.value != null && obs.status === "estimate") sourceCell.appendChild(el("span", "source-status", "Estimate"));
+      var freshness = freshnessLabel(obs);
+      if (obs.value != null && freshness) sourceCell.appendChild(el("span", "source-status", freshness));
+      tr.appendChild(sourceCell);
       body.appendChild(tr);
     });
     table.appendChild(body);
@@ -383,12 +437,10 @@
     var card = el("article", "card stat");
     card.appendChild(el("h3", null, indicator.name));
     if (!obs || obs.value == null) {
-      var missing = el("p", "fig missing", "Not published");
+      var missing = el("p", "fig missing", "Unavailable");
       card.appendChild(missing);
       card.appendChild(el("p", "plain", indicator.plain));
-      card.appendChild(el("p", "exact", obs && obs.date
-        ? "World Bank returned no value for " + obs.date + ". Series " + indicator.id + "."
-        : "World Bank returned no dated row. Series " + indicator.id + "."));
+      card.appendChild(el("p", "exact", unavailableText(obs) + " Primary series " + indicator.id + "."));
       return card;
     }
     var fig = el("p", "fig", formatNumber(indicator, obs.value));
@@ -396,7 +448,7 @@
     card.appendChild(fig);
     var word = signWord(indicator, obs.value);
     card.appendChild(el("p", "plain", indicator.plain + (word ? " This reading is a " + word.toLowerCase() + "." : "")));
-    card.appendChild(el("p", "exact", obs.date + " \u00b7 source value " + exactGrouped(obs.value) + " \u00b7 " + indicator.id));
+    card.appendChild(el("p", "exact", exactSourceLine(indicator, obs)));
     return card;
   }
 

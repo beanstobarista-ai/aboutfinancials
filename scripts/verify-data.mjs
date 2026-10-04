@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DATA_FILE = path.join(ROOT, "js", "data.js");
 const WORLD_BANK_ROOT = "https://api.worldbank.org/v2";
+const IMF_DATAMAPPER_ROOT = "https://www.imf.org/external/datamapper/api/v2";
 const CALENDAR_URL = "https://nfs.faireconomy.media/ff_calendar_thisweek.json";
 
 function loadData() {
@@ -105,6 +106,10 @@ function checkShape(AF, failures) {
       const observation = records[code];
       if (!observation || !("date" in observation) || !("value" in observation)) {
         failures.push(`Missing observation shape for ${indicator.id}/${code}`);
+      } else if (observation.value != null && (!observation.sourceKey || !observation.sourceSeries || !observation.status)) {
+        failures.push(`Missing provenance for populated observation ${indicator.id}/${code}`);
+      } else if (!Array.isArray(observation.checkedSourceKeys) || !observation.checkedSourceKeys.includes("worldBankWdi")) {
+        failures.push(`Missing World Bank source check for ${indicator.id}/${code}`);
       }
     }
   }
@@ -136,24 +141,34 @@ async function verifyCountryList(AF, failures, counts) {
 async function verifyWorldBank(AF, failures, warnings, counts) {
   const codes = AF.countries.map((country) => country.code);
   await mapLimit(AF.indicators, 3, async (indicator) => {
-    const rows = await worldBankRows(codes, indicator.id, "mrv=1&per_page=500");
+    process.stderr.write(`verify World Bank ${indicator.id}\n`);
+    const rows = await worldBankRows(codes, indicator.id, "mrnev=1&per_page=500");
 
     const latest = new Map();
     for (const row of rows) {
       const code = iso2(row);
-      if (code) latest.set(code, row);
+      const existing = code ? latest.get(code) : null;
+      if (code && row.value != null && (!existing || Number(row.date) > Number(existing.date))) latest.set(code, row);
     }
 
     for (const code of codes) {
       const stored = AF.series[indicator.id][code];
       const row = latest.get(code);
-      if (!row) {
-        failures.push(`World Bank returned no latest row for ${indicator.id}/${code}`);
+      const currentDate = row?.date == null ? null : String(row.date);
+      const currentValue = row?.value == null ? null : String(row.value);
+
+      if (stored.sourceKey !== "worldBankWdi") {
+        if (currentValue != null) {
+          warnings.push(`${indicator.id}/${code} now has a World Bank value for ${currentDate}; the stored fallback or unavailable state remains source-valid for its build time`);
+        }
+        counts.worldBank += 1;
         continue;
       }
 
-      const currentDate = row.date == null ? null : String(row.date);
-      const currentValue = row.value == null ? null : String(row.value);
+      if (!row || currentValue == null) {
+        failures.push(`World Bank returned no non-empty row for stored World Bank observation ${indicator.id}/${code}`);
+        continue;
+      }
       if (stored.date === currentDate && sameValue(stored.value, currentValue)) {
         counts.worldBank += 1;
         continue;
@@ -178,6 +193,7 @@ async function verifyWorldBank(AF, failures, warnings, counts) {
   });
 
   await mapLimit(Object.entries(AF.history || {}), 2, async ([indicatorId, countries]) => {
+    process.stderr.write(`verify history ${indicatorId}\n`);
     const rows = await worldBankRows(codes, indicatorId, "mrv=20&per_page=10000");
     const source = new Map();
     for (const row of rows) {
@@ -197,7 +213,51 @@ async function verifyWorldBank(AF, failures, warnings, counts) {
   });
 }
 
+async function verifyImfWEO(AF, failures, warnings, counts) {
+  const mappings = AF.fallbackPolicy?.mappings || [];
+  const maxYear = Number(AF.fallbackPolicy?.maxImfYear);
+  const countriesByCode = new Map(AF.countries.map((country) => [country.code, country]));
+
+  await mapLimit(mappings, 2, async (mapping) => {
+    process.stderr.write(`verify IMF ${mapping.sourceSeries}\n`);
+    const payload = await fetchJson(`${IMF_DATAMAPPER_ROOT}/${encodeURIComponent(mapping.sourceSeries)}`);
+    const values = payload.values?.[mapping.sourceSeries];
+    if (!values) {
+      failures.push(`Unexpected IMF DataMapper response for ${mapping.sourceSeries}`);
+      return;
+    }
+
+    for (const [code, stored] of Object.entries(AF.series[mapping.indicatorId] || {})) {
+      if (!stored.checkedSourceKeys?.includes("imfWEO")) continue;
+      const country = countriesByCode.get(code);
+      const byYear = values[country?.iso3] || {};
+      const eligibleYears = Object.keys(byYear)
+        .filter((year) => Number(year) <= maxYear && byYear[year] != null && Number.isFinite(Number(byYear[year])))
+        .sort((a, b) => Number(b) - Number(a));
+
+      if (stored.sourceKey === "imfWEO") {
+        if (stored.sourceSeries !== mapping.sourceSeries || stored.status !== "estimate") {
+          failures.push(`Invalid IMF provenance for ${mapping.indicatorId}/${code}`);
+          continue;
+        }
+        const value = byYear[stored.date];
+        if (value == null || !sameValue(stored.value, String(value))) {
+          failures.push(`IMF fallback ${mapping.sourceSeries}/${country?.iso3}/${stored.date} does not match the source`);
+          continue;
+        }
+        counts.imfWEO += 1;
+        if (eligibleYears[0] && eligibleYears[0] !== stored.date) {
+          warnings.push(`${mapping.indicatorId}/${code} has a newer eligible IMF WEO value for ${eligibleYears[0]}`);
+        }
+      } else if (stored.value == null && eligibleYears.length) {
+        failures.push(`Missing IMF fallback for ${mapping.indicatorId}/${code}; source has ${eligibleYears[0]}`);
+      }
+    }
+  });
+}
+
 async function verifyFx(AF, failures, counts) {
+  process.stderr.write("verify FX\n");
   const url = `https://api.frankfurter.app/${encodeURIComponent(AF.fx.date)}?from=${encodeURIComponent(AF.fx.base || "USD")}`;
   const source = await fetchJson(url);
   if (source.date !== AF.fx.date) failures.push(`Frankfurter returned ${source.date}, expected ${AF.fx.date}`);
@@ -212,6 +272,7 @@ async function verifyFx(AF, failures, counts) {
 }
 
 async function verifyCalendar(AF, failures, warnings, counts) {
+  process.stderr.write("verify calendar\n");
   let source;
   try {
     source = await fetchJson(CALENDAR_URL);
@@ -249,11 +310,12 @@ async function main() {
   const AF = loadData();
   const failures = [];
   const warnings = [];
-  const counts = { countryList: 0, worldBank: 0, history: 0, fx: 0, calendar: 0 };
+  const counts = { countryList: 0, worldBank: 0, imfWEO: 0, history: 0, fx: 0, calendar: 0 };
 
   checkShape(AF, failures);
   await Promise.all([
     verifyWorldBank(AF, failures, warnings, counts),
+    verifyImfWEO(AF, failures, warnings, counts),
     verifyCountryList(AF, failures, counts),
     verifyFx(AF, failures, counts),
     verifyCalendar(AF, failures, warnings, counts),

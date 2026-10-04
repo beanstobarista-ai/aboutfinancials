@@ -16,12 +16,13 @@ The pages are plain HTML, one shared stylesheet (`css/styles.css`), and two scri
 
 ## What is real
 
-Figures were copied from public APIs while this folder was built (3 October 2026, Riyadh). They are not estimated, and a missing cell was left blank.
+Figures were copied from named public APIs while this folder was built (4 October 2026, Riyadh). World Bank observations and IMF World Economic Outlook estimates are labelled separately, and a missing cell remains unavailable. See [SOURCES.md](SOURCES.md) for the source and fallback policy.
 
-- **World Bank, World Development Indicators, API v2, `format=json`.** Snapshot uses `mrv=1` and stores the observation year the API returned. Coverage follows the World Bank Countries API: 217 individual countries and economies, with aggregate regions and income groups excluded. The homepage keeps 17 featured economies; the Countries directory and indicator tables contain the complete source list.
+- **World Bank, World Development Indicators, API v2, `format=json`.** Snapshot uses `mrnev=1`, the most recent non-empty observation, and stores the actual observation year. Coverage follows the World Bank Countries API: 217 individual countries and economies, with aggregate regions and income groups excluded. The homepage keeps 17 featured economies; the Countries directory and indicator tables contain the complete source list.
+- **IMF World Economic Outlook, DataMapper API v2.** A fallback is used only when World Bank `mrnev=1` has no numeric observation and only for the compatible inflation (`PCPIPCH`) and current-account (`BCA_NGDPD`) mappings documented in `SOURCES.md`. Every such value is labelled as an IMF WEO estimate.
 - **History series** (embedded year/value pairs, null years omitted, not interpolated): `NY.GDP.MKTP.KD.ZG` (GDP growth, annual %) and `FP.CPI.TOTL.ZG` (inflation, consumer prices, annual %), up to the last 15 available years per country. Country pages draw a simple inline SVG line chart when at least three points exist.
 - **Frankfurter, European Central Bank reference rates**, `https://api.frankfurter.app/latest?from=USD`, rate date **2 October 2026**. 29 currencies. A direct `to=SAR` request returned 404, so no SAR rate is shown.
-- **Calendar:** a snapshot of Forex Factory’s public weekly JSON (`https://nfs.faireconomy.media/ff_calendar_thisweek.json`) for source dates 27 September 2026 through 3 October 2026. Forecast and previous are shown only when that file included them. The file has no released-actual field.
+- **Calendar:** a snapshot of Forex Factory’s public weekly JSON (`https://nfs.faireconomy.media/ff_calendar_thisweek.json`) for source dates 4 October 2026 through 9 October 2026. Forecast and previous are shown only when that file included them. The file has no released-actual field.
 
 Rounded labels (trillions, two-decimal percents) are for reading. The exact source value is in the line under the figure and in the element’s title.
 
@@ -33,7 +34,7 @@ Run the read-only source verifier before reviewing a data update:
 node scripts/verify-data.mjs
 ```
 
-It checks every embedded latest World Bank observation, every stored history point, the dated ECB/Frankfurter exchange-rate snapshot, and—while the same source week remains available—the Forex Factory calendar snapshot. It reports source-valid but stale World Bank observations as warnings and exits unsuccessfully when a stored value does not match its named source.
+It checks every embedded World Bank observation, every IMF WEO fallback, every stored history point, the dated ECB/Frankfurter exchange-rate snapshot, and—while the same source week remains available—the Forex Factory calendar snapshot. It reports newer upstream observations as warnings and exits unsuccessfully when a stored value does not match its named source.
 
 The rebuild script is portable across Windows, macOS, and Linux. It rewrites `js/data.js`, so use it only when intentionally preparing a reviewed data refresh:
 
