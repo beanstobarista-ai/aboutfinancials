@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>US Restaurant Feasibility Model · About Financials</title>
+  <meta name="description" content="Build a transparent US restaurant operating model from your own local assumptions, with break-even and scenario analysis.">
+  <meta name="theme-color" content="#f5f5f7">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="plans">
+
+<a class="skip" href="#content">Skip to content</a>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html">About Financials</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="nav-links" aria-label="Primary">
+      <a href="country.html" data-page="country">Countries</a>
+      <a href="markets.html" data-page="markets">Markets</a>
+      <a href="indicators.html" data-page="indicators">Indicators</a>
+      <a href="calendar.html" data-page="calendar">Calendar</a>
+      <a href="companies.html" data-page="companies">Companies</a>
+      <a href="business-plans.html" data-page="plans">Business Plans</a>
+    </nav>
+  </div>
+</header>
+
+<main id="content">
+  <header class="page-head plan-model-head">
+    <div class="wrap">
+      <p class="kicker">Business Plan Lab · United States</p>
+      <h1>Restaurant feasibility model</h1>
+      <p class="lede">Turn your own location, demand, cost and investment assumptions into a transparent monthly operating model. Every output shows its formula; no unsupported industry average is inserted.</p>
+      <div class="plan-status-row">
+        <span class="status-pill amber">Owner inputs</span>
+        <span class="status-pill dark">Calculated outputs</span>
+        <span class="status-pill">Official context</span>
+      </div>
+      <div class="card callout evidence-boundary">
+        <p><strong>Planning model, not a forecast.</strong> The model does not include debt service, depreciation, income tax, sales tax, pre-opening losses, seasonality or local permit costs unless you include them in the inputs. State and local rules must be checked for the chosen city.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="section model-workspace" aria-labelledby="model-title">
+    <div class="wrap">
+      <div class="section-heading-row">
+        <div>
+          <p class="kicker">Working model</p>
+          <h2 id="model-title">Build the monthly economics</h2>
+          <p class="lede">All fields are required unless marked optional. Values stay in this browser tab and are not saved or transmitted.</p>
+        </div>
+        <div class="model-actions">
+          <button class="secondary-button" id="clear-plan" type="button">Clear inputs</button>
+          <button class="primary-button" id="print-plan" type="button">Print plan</button>
+        </div>
+      </div>
+
+      <form id="restaurant-model" novalidate>
+        <div class="model-layout">
+          <div class="model-inputs">
+            <fieldset class="card input-panel">
+              <legend>1. Location and format</legend>
+              <p class="panel-note">Location identifies the jurisdiction to research. It does not automatically supply local costs or rules.</p>
+              <div class="field-grid">
+                <label><span>Plan name <small>optional</small></span><input name="planName" type="text" autocomplete="organization" placeholder="Enter a working name"></label>
+                <label><span>City</span><input name="city" type="text" autocomplete="address-level2" required placeholder="Enter city"></label>
+                <label><span>State or territory</span><input name="state" type="text" autocomplete="address-level1" required placeholder="Enter state or territory"></label>
+                <label><span>Restaurant format</span>
+                  <select name="format" required>
+                    <option value="">Select format</option>
+                    <option value="full-service">Full-service restaurant · NAICS 722511</option>
+                    <option value="limited-service">Limited-service restaurant · NAICS 722513</option>
+                    <option value="other">Other food-service format</option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card input-panel">
+              <legend>2. Capacity and sales</legend>
+              <p class="panel-note">Enter your proposed operating assumptions. Currency is U.S. dollars.</p>
+              <div class="field-grid">
+                <label><span>Seats</span><input name="seats" type="number" min="1" step="1" inputmode="numeric" required placeholder="Enter seats"></label>
+                <label><span>Operating days per month</span><input name="daysPerMonth" type="number" min="1" max="31" step="1" inputmode="numeric" required placeholder="Enter days"></label>
+                <label><span>Customer covers per day</span><input name="coversPerDay" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="Enter covers"></label>
+                <label><span>Average check per cover · USD</span><input name="averageCheck" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card input-panel">
+              <legend>3. Monthly costs</legend>
+              <p class="panel-note">Use quotes, lease terms and your staffing plan. Enter zero only when the cost truly does not apply.</p>
+              <div class="field-grid">
+                <label><span>Rent and occupancy · USD</span><input name="rent" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Payroll and payroll taxes · USD</span><input name="payroll" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Utilities · USD</span><input name="utilities" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Insurance and permits · USD</span><input name="insurancePermits" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Marketing and administration · USD</span><input name="marketingAdmin" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+              </div>
+              <div class="field-grid field-grid-three percentage-fields">
+                <label><span>Food and beverage cost · % of sales</span><input name="foodCostPct" type="number" min="0" max="100" step="0.01" inputmode="decimal" required placeholder="Enter percent"></label>
+                <label><span>Card and delivery fees · % of sales</span><input name="transactionPct" type="number" min="0" max="100" step="0.01" inputmode="decimal" required placeholder="Enter percent"></label>
+                <label><span>Other variable costs · % of sales</span><input name="otherVariablePct" type="number" min="0" max="100" step="0.01" inputmode="decimal" required placeholder="Enter percent"></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card input-panel">
+              <legend>4. Opening funding</legend>
+              <div class="field-grid">
+                <label><span>Fit-out, equipment and pre-opening · USD</span><input name="openingInvestment" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Working-capital reserve · USD</span><input name="workingCapital" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card input-panel">
+              <legend>5. Your stress-test changes <small>optional</small></legend>
+              <p class="panel-note">Enter changes relative to the base case. These are your scenarios, not AboutFinancials forecasts.</p>
+              <div class="scenario-input-grid">
+                <div>
+                  <h3>Downside</h3>
+                  <label><span>Sales change · %</span><input name="downsideSalesPct" type="number" max="0" step="0.01" inputmode="decimal" placeholder="Enter zero or a negative percent"></label>
+                  <label><span>Food-cost change · percentage points</span><input name="downsideFoodPp" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Enter zero or a positive change"></label>
+                </div>
+                <div>
+                  <h3>Upside</h3>
+                  <label><span>Sales change · %</span><input name="upsideSalesPct" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Enter zero or a positive percent"></label>
+                  <label><span>Food-cost change · percentage points</span><input name="upsideFoodPp" type="number" max="0" step="0.01" inputmode="decimal" placeholder="Enter zero or a negative change"></label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+          <aside class="model-results" aria-label="Calculated results">
+            <div class="card results-panel" id="results-panel" aria-live="polite">
+              <p class="evidence-label">Calculated from your inputs</p>
+              <h2>Base case</h2>
+              <p class="result-context" id="result-context">Enter all required assumptions to calculate the model.</p>
+              <div class="result-grid">
+                <div><span>Monthly sales</span><strong id="result-sales">Unavailable</strong></div>
+                <div><span>Monthly operating result</span><strong id="result-profit">Unavailable</strong></div>
+                <div><span>Operating margin</span><strong id="result-margin">Unavailable</strong></div>
+                <div><span>Break-even sales</span><strong id="result-break-even-sales">Unavailable</strong></div>
+                <div><span>Break-even covers per day</span><strong id="result-break-even-covers">Unavailable</strong></div>
+                <div><span>Covers per seat per day</span><strong id="result-seat-use">Unavailable</strong></div>
+                <div><span>Opening funding entered</span><strong id="result-funding">Unavailable</strong></div>
+              </div>
+              <p class="result-warning" id="result-warning" hidden></p>
+            </div>
+
+            <div class="card formula-panel">
+              <p class="evidence-label">Transparent calculation</p>
+              <h3>Monthly bridge</h3>
+              <dl id="calculation-bridge">
+                <div><dt>Sales</dt><dd>Unavailable</dd></div>
+                <div><dt>Less variable costs</dt><dd>Unavailable</dd></div>
+                <div><dt>Contribution</dt><dd>Unavailable</dd></div>
+                <div><dt>Less fixed costs</dt><dd>Unavailable</dd></div>
+                <div class="bridge-total"><dt>Operating result</dt><dd>Unavailable</dd></div>
+              </dl>
+            </div>
+          </aside>
+        </div>
+        <div id="form-errors" class="card form-errors" role="alert" hidden></div>
+      </form>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="scenario-title">
+    <div class="wrap">
+      <p class="kicker">Sensitivity</p>
+      <h2 id="scenario-title">Your downside, base and upside cases</h2>
+      <p class="lede">The scenario table appears after the base model is complete. Downside and upside remain unavailable until you enter their changes.</p>
+      <div class="card scenario-table-card">
+        <div class="table-scroll">
+          <table id="scenario-table">
+            <caption>Scenario changes are user assumptions. Results are calculations, not observed data or forecasts.</caption>
+            <thead><tr><th>Case</th><th>Sales assumption</th><th>Food cost</th><th>Monthly sales</th><th>Operating result</th><th>Margin</th></tr></thead>
+            <tbody>
+              <tr data-case="downside"><th>Downside</th><td colspan="5">Enter downside changes to calculate.</td></tr>
+              <tr data-case="base"><th>Base</th><td colspan="5">Complete the required inputs to calculate.</td></tr>
+              <tr data-case="upside"><th>Upside</th><td colspan="5">Enter upside changes to calculate.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="formula-title">
+    <div class="wrap">
+      <p class="kicker">Method</p>
+      <h2 id="formula-title">What the model calculates</h2>
+      <div class="framework-grid model-method-grid">
+        <article class="card"><h3>Sales and seat use</h3><p>Sales equals covers per day × operating days × average check. Covers per seat equals daily covers ÷ seats.</p></article>
+        <article class="card"><h3>Contribution</h3><p>Sales less food, transaction and other variable costs.</p></article>
+        <article class="card"><h3>Operating result</h3><p>Contribution less the five fixed-cost inputs. This is not net income or cash flow.</p></article>
+        <article class="card"><h3>Break-even sales</h3><p>Total fixed costs ÷ contribution-margin ratio. The result is unavailable when the ratio is zero or negative.</p></article>
+        <article class="card"><h3>Break-even covers</h3><p>Break-even monthly sales ÷ operating days ÷ average check.</p></article>
+        <article class="card"><h3>Opening funding</h3><p>Opening investment plus working-capital reserve. Financing costs are not included.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="research-title">
+    <div class="wrap">
+      <p class="kicker">Before relying on the result</p>
+      <h2 id="research-title">Complete the local evidence pack</h2>
+      <div class="research-grid evidence-checklist">
+        <article class="card"><span>01</span><h3>Demand</h3><p>Footfall or delivery-zone evidence, service-period demand, competitor pricing and a documented covers build-up.</p></article>
+        <article class="card"><span>02</span><h3>Site</h3><p>Lease proposal, permitted use, occupancy limits, fit-out quotations, utilities capacity and accessibility requirements.</p></article>
+        <article class="card"><span>03</span><h3>Labour</h3><p>Staffing by shift, applicable state and local minimum wages, tip rules, payroll taxes, benefits and overtime.</p></article>
+        <article class="card"><span>04</span><h3>Menu</h3><p>Recipe-level ingredient quantities, supplier quotes, yield, waste, packaging and menu-mix evidence.</p></article>
+        <article class="card"><span>05</span><h3>Compliance</h3><p>Entity registration, food-establishment permits, health review, fire and building approvals, liquor rules and sales tax.</p></article>
+        <article class="card"><span>06</span><h3>Funding</h3><p>Fit-out schedule, deposit timing, contingency, pre-opening payroll, working-capital runway and financing terms.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section source-register" aria-labelledby="sources-title">
+    <div class="wrap">
+      <p class="kicker">Source and methodology ledger</p>
+      <h2 id="sources-title">Official context used in this model</h2>
+      <p class="lede">These sources shape the planning and compliance framework. They do not supply any of the financial assumptions entered above.</p>
+      <article class="card source-card">
+        <a href="https://www.sba.gov/counseling/plan-your-business/" rel="noopener">U.S. Small Business Administration · Plan your business</a>
+        <p>Publisher: SBA · Scope: U.S. business-plan structure, startup-cost and break-even guidance · Retrieved 5 October 2026 · Update cadence: irregular · Units: none used · Missing-data behavior: contributes no financial value.</p>
+      </article>
+      <article class="card source-card">
+        <a href="https://www.census.gov/naics/?input=722511&amp;year=2022&amp;details=722511" rel="noopener">U.S. Census Bureau · 2022 NAICS restaurant classifications</a>
+        <p>Publisher: U.S. Census Bureau · Scope: U.S. industry classification, including 722511 full-service restaurants and 722513 limited-service restaurants · Retrieved 5 October 2026 · Update cadence: periodic NAICS revisions · Units: none · Missing-data behavior: user selects “other” when neither classification fits.</p>
+      </article>
+      <article class="card source-card">
+        <a href="https://www.dol.gov/agencies/whd/minimum-wage/faq" rel="noopener">U.S. Department of Labor · Minimum-wage questions and answers</a>
+        <p>Publisher: U.S. Department of Labor, Wage and Hour Division · Scope: federal wage floor and the requirement to apply a higher state minimum where applicable · Retrieved 5 October 2026 · Update cadence: rule-dependent · Units: no wage value imported · Missing-data behavior: local wage input remains required.</p>
+      </article>
+      <article class="card source-card">
+        <a href="https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa" rel="noopener">U.S. Department of Labor · Fact Sheet 15, tipped employees</a>
+        <p>Publisher: U.S. Department of Labor, Wage and Hour Division · Scope: federal tipped-employee framework · Retrieved 5 October 2026 · Update cadence: rule-dependent · Geography: United States, subject to stricter state and local law · Units: no wage value imported · Missing-data behavior: user payroll assumption must reflect the chosen jurisdiction.</p>
+      </article>
+      <article class="card source-card">
+        <a href="https://www.fda.gov/food/retail-food-protection/fda-food-code" rel="noopener">U.S. Food and Drug Administration · FDA Food Code</a>
+        <p>Publisher: FDA · Current page identifies the 2026 Food Code as the most recent full edition · Scope: model food-safety code for adoption by jurisdictions · Retrieved 5 October 2026 · Update cadence: full editions plus interim supplements · Units: none · Missing-data behavior: local adoption and permit requirements remain unresolved until the jurisdiction is researched.</p>
+      </article>
+      <p class="method-note"><strong>Usage and licensing.</strong> These are public U.S. government webpages linked for attribution and context. The model does not reproduce an official dataset or imply agency endorsement. Review the <a href="https://www.sba.gov/about-sba/open-government/about-the-sba-gov-website/" rel="noopener">SBA</a>, <a href="https://www.census.gov/about/policies/citation.html" rel="noopener">Census Bureau</a>, <a href="https://www.dol.gov/general/aboutdol/copyright" rel="noopener">Department of Labor</a>, and <a href="https://www.fda.gov/about-fda/about-website/website-policies" rel="noopener">FDA</a> usage policies. Before publication of a location-specific plan, record applicable state and local sources, supplier quotations, lease terms, observation dates and any permissions governing reused data.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href="index.html">About Financials</a>
+      <p>Economies, companies, and business economics in plain language.</p>
+      <p><a href="business-plans.html">Business Plan Lab</a> · <a href="companies.html">Companies</a> · <a href="country.html">Countries</a></p>
+    </div>
+    <div>
+      <p>This model separates official context, owner assumptions and calculated outputs. It is not legal, tax, investment or lending advice.</p>
+      <p class="legal"><span id="built-at"></span>No result is a guarantee of commercial performance or financing.</p>
+    </div>
+  </div>
+</footer>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/business-plan-model.js"></script>
+<script src="js/business-plan.js"></script>
+</body>
+</html>

@@ -44,6 +44,14 @@ node scripts/verify-company-data.mjs
 
 The company verifier reconciles segment totals, revenue groups and free cash flow, then checks every populated Amazon filing value against the filing-specific SEC document.
 
+Verify the Business Plan Lab calculation engine separately:
+
+```bash
+node scripts/verify-business-plan.mjs
+```
+
+It checks base-case revenue and cost formulas, profit and loss states, break-even, opening funding, scenario changes and invalid-input behavior. It does not verify owner-entered assumptions; those require local evidence.
+
 The rebuild script is portable across Windows, macOS, and Linux. It rewrites `js/data.js`, so use it only when intentionally preparing a reviewed data refresh:
 
 ```bash
@@ -56,4 +64,4 @@ node scripts/rebuild-data.mjs
 - No economic calendar that updates by itself, and no actuals beyond what the weekly file contained.
 - No streaming market quotes, accounts, or news. History charts are static SVG from the embedded World Bank series above, not a chart library.
 - Company Intelligence contains a complete pilot Amazon brief and reusable editorial structure. Alphabet and Apple remain research frameworks, not complete briefs.
-- Business Plan Lab currently contains model blueprints without financial outputs. A plan needs an approved geography, date, currency, operating format, assumptions, and source set before figures can be added.
+- Business Plan Lab includes a working U.S. restaurant feasibility model. It has no benchmark defaults: location, format, sales, costs, funding and sensitivity changes are user inputs, while every output is a reproducible calculation. State- and city-specific permits, wage rules, taxes, rent and supplier evidence still require local research before relying on a plan.

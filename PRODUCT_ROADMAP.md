@@ -26,7 +26,7 @@ Business plans separate external evidence, owner assumptions, and model results.
 - Establish reusable Company Intelligence and Business Plan Lab page patterns.
 - Keep navigation among the existing economic pages and the new verticals obvious on mobile and desktop.
 - Publish the complete Amazon pilot brief; retain Alphabet and Apple as the next reviewed company briefs.
-- Pilot plan structures for a broiler chicken farm and a restaurant; select a geography before adding figures.
+- Maintain the broiler chicken farm blueprint and launch the U.S. restaurant pilot with owner-entered assumptions, transparent formulas, break-even and user-defined scenarios. Add state and city evidence before turning a model into a location-specific plan.
 
 ### Phase 2 — useful depth
 
