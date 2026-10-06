@@ -1,10 +1,9 @@
-# About Financials — local prototype
+# AboutFinancials
 
-Static pages for a future aboutfinancials.com. Nothing here talks to WordPress or the live domain.
+Static site for aboutfinancials.com: **Finance, made clear, for money that crosses borders.**
+Plain HTML, one stylesheet, small vanilla JS files. No framework, no build step, no backend.
 
-## Open it
-
-From this folder:
+## Preview locally
 
 ```bash
 python3 -m http.server 8765
@@ -12,21 +11,42 @@ python3 -m http.server 8765
 
 Then open http://127.0.0.1:8765
 
-The pages are plain HTML, one shared stylesheet (`css/styles.css`), and two scripts (`js/data.js`, `js/app.js`). Search, tables, country pages, history charts, and the calendar all run in the browser from the embedded file. There is no backend.
+## Pages
 
-## What is real
+| File | What it is |
+|---|---|
+| `index.html` | Home: positioning, Money Map, Learn (coming soon), Templates (coming soon) |
+| `money-map.html` | Money Map: net worth across currencies, runs in the browser |
+| `about.html` | About the site (publisher: AboutFinancials) |
+| `editorial.html` | Editorial and AI policy, number-sourcing method |
+| `privacy.html` | Privacy: localStorage keys and the Frankfurter request |
+| `terms.html` | Terms of use |
+| `sitemap.xml`, `sitemap_index.xml`, `robots.txt` | Crawl files for https://aboutfinancials.com/ |
 
-Figures were copied from public APIs while this folder was built (3 October 2026, Riyadh). They are not estimated, and a missing cell was left blank.
+The header and footer are repeated in each HTML file. If you change one, change them all.
 
-- **World Bank, World Development Indicators, API v2, `format=json`.** Snapshot uses `mrv=1` and stores the observation year the API returned. Countries (17): Saudi Arabia (SA), United States (US), China (CN), Germany (DE), India (IN), Japan (JP), United Kingdom (GB), United Arab Emirates (AE), France (FR), South Korea (KR), Brazil (BR), Canada (CA), Australia (AU), South Africa (ZA), Türkiye (TR), Indonesia (ID), Mexico (MX). Germany and France each have their own country card.
-- **History series** (embedded year/value pairs, null years omitted, not interpolated): `NY.GDP.MKTP.KD.ZG` (GDP growth, annual %) and `FP.CPI.TOTL.ZG` (inflation, consumer prices, annual %), up to the last 15 available years per country. Country pages draw a simple inline SVG line chart when at least three points exist.
-- **Frankfurter, European Central Bank reference rates**, `https://api.frankfurter.app/latest?from=USD`, rate date **2 October 2026**. 29 currencies. A direct `to=SAR` request returned 404, so no SAR rate is shown.
-- **Calendar:** a snapshot of Forex Factory’s public weekly JSON (`https://nfs.faireconomy.media/ff_calendar_thisweek.json`) for source dates 27 September 2026 through 3 October 2026. Forecast and previous are shown only when that file included them. The file has no released-actual field.
+## Scripts
 
-Rounded labels (trillions, two-decimal percents) are for reading. The exact source value is in the line under the figure and in the element’s title.
+- `js/site.js`: mobile menu toggle (every page).
+- `js/money-map-core.js`: pure conversion maths, rate parsing, and the cited peg list. Works in the browser and in Node.
+- `js/money-map.js`: Money Map UI, localStorage, and the live rate fetch.
 
-## What is not built
+## Where Money Map's numbers come from
 
-- No deploy to the live WordPress site.
-- No economic calendar that updates by itself, and no actuals beyond what the weekly file contained.
-- No streaming market quotes, accounts, or news. History charts are static SVG from the embedded World Bank series above, not a chart library.
+- **ECB euro reference rates**, fetched at runtime from Frankfurter: `https://api.frankfurter.dev/v2/providers/ecb/rates?base=EUR`, falling back to `https://api.frankfurter.dev/v1/latest` (also ECB). The rate date and source are shown on the page.
+- **Gulf pegs** (SAR, AED, QAR, BHD, OMR): fixed per-US-dollar rates, each stored in `js/money-map-core.js` next to the URL of the central bank page that states it, and shown in the UI. Converted through the ECB's USD rate. KWD is excluded (basket peg).
+- If the fetch fails, the page uses the last rates this browser saved (labelled with their date), or shows a message and converts nothing. No rate is ever invented.
+
+User entries are stored only in the browser's localStorage (`af-money-map-v1`, plus `af-money-map-rates-v1` for the rate cache).
+
+## Tests
+
+```bash
+node tests/money-map.test.js
+```
+
+Uses a fixed rates object (round test numbers, not real rates) to check conversion, pegs, totals, and validation.
+
+## Deploying
+
+Manual upload only, after owner approval. `README.md` and `tests/` don't need to be uploaded.

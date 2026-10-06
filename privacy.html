@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy · AboutFinancials</title>
+  <meta name="description" content="What data AboutFinancials handles: no accounts, no cookies of our own, Money Map entries kept in your browser's local storage, and one exchange-rate request to Frankfurter.">
+  <link rel="canonical" href="https://aboutfinancials.com/privacy.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AboutFinancials">
+  <meta property="og:title" content="Privacy · AboutFinancials">
+  <meta property="og:description" content="What data AboutFinancials handles: no accounts, no cookies of our own, Money Map entries kept in your browser's local storage, and one exchange-rate request to Frankfurter.">
+  <meta property="og:url" content="https://aboutfinancials.com/privacy.html">
+  <meta name="theme-color" content="#f5f5f7">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">AboutFinancials</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="nav-links" aria-label="Main">
+      <a href="money-map.html">Money Map</a>
+      <a href="index.html#learn">Learn</a>
+      <a href="index.html#templates">Templates</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main id="content">
+<section class="page-head">
+    <div class="narrow">
+      <p class="kicker">Privacy</p>
+      <h1>Privacy</h1>
+      <p class="lede">Short version: no accounts, no cookies of our own, no tracking scripts. What you type into Money Map stays in your browser.</p>
+      <p class="updated">Last updated 6 October 2026</p>
+    </div>
+  </section>
+  <article class="narrow prose">
+    <h2>What we collect</h2>
+    <p>AboutFinancials does not run accounts, analytics, advertising, or tracking scripts, and does not set cookies of its own. We do not collect your name, email address, or financial details.</p>
+    <p>Like any website, our hosting server may keep standard technical logs of requests (for example IP address, browser type, page requested, and time) for security and to keep the site running.</p>
+
+    <h2>Money Map and local storage</h2>
+    <p>Money Map saves your items and your chosen home currency in your browser’s <strong>local storage</strong>, on your own device. It is never sent to us. We use these keys:</p>
+    <ul>
+      <li><code>af-money-map-v1</code>: your items (name, asset or debt, amount, currency) and your home currency.</li>
+      <li><code>af-money-map-rates-v1</code>: a copy of the last exchange rates loaded, so the tool can still work if the rate service is unavailable.</li>
+    </ul>
+    <p>To delete this data, use “Clear all items from this browser” on the Money Map page, or clear site data in your browser settings. Anyone with access to your device and browser profile could see it, so avoid using Money Map on a shared computer.</p>
+
+    <h2>Exchange rates from Frankfurter</h2>
+    <p>When you open Money Map, your browser requests exchange rates directly from the Frankfurter API at <code>api.frankfurter.dev</code>. That request contains no information you typed. As with any web request, Frankfurter’s servers (which run behind Cloudflare) receive your IP address and browser details. Frankfurter states that its API “doesn’t collect or log personal data, IP addresses, or request URLs” (<a href="https://frankfurter.dev/" rel="noopener">Frankfurter FAQ</a>).</p>
+
+    <h2>Email updates</h2>
+    <p>The email box on Money Map is switched off. It does not collect or send anything. If we turn on email updates later, we will update this page first to say which service we use and how to unsubscribe.</p>
+
+    <h2>Links to other sites</h2>
+    <p>We link to sources such as central banks and the European Central Bank. Those sites have their own privacy policies.</p>
+
+    <h2>Changes</h2>
+    <p>If this policy changes, we will update this page and the date above.</p>
+    <!-- OWNER: add a contact route for privacy questions before launch. -->
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href="index.html">AboutFinancials</a>
+      <p>Finance, made clear, for money that crosses borders.</p>
+      <p>Education and tools only. Nothing on this site is financial, tax, or investment advice.</p>
+    </div>
+    <nav aria-label="Site">
+      <h2>Site</h2>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="money-map.html">Money Map</a></li>
+        <li><a href="index.html#learn">Learn</a></li>
+        <li><a href="index.html#templates">Templates</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Trust and legal">
+      <h2>Trust</h2>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="editorial.html">Editorial and AI policy</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+<script src="js/site.js"></script>
+</body>
+</html>

@@ -3,120 +3,139 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Finance, made clear · About Financials</title>
-  <meta name="description" content="Countries, markets, and indicators in plain language.">
+  <title>AboutFinancials · Finance, made clear, for money that crosses borders</title>
+  <meta name="description" content="Free tools and plain-language explainers for expats, Gulf residents, remote workers, and freelancers whose money lives in more than one currency.">
+  <link rel="canonical" href="https://aboutfinancials.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AboutFinancials">
+  <meta property="og:title" content="AboutFinancials · Finance, made clear, for money that crosses borders">
+  <meta property="og:description" content="Free tools and plain-language explainers for expats, Gulf residents, remote workers, and freelancers whose money lives in more than one currency.">
+  <meta property="og:url" content="https://aboutfinancials.com/">
   <meta name="theme-color" content="#f5f5f7">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body data-page="home">
+<body>
 
 <a class="skip" href="#content">Skip to content</a>
-<header class="nav">
-  <div class="wrap nav-inner">
-    <a class="brand" href="index.html">About Financials</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">AboutFinancials</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-    <nav id="site-nav" class="nav-links" aria-label="Primary">
-      <a href="index.html" data-page="home">Home</a>
-      <a href="markets.html" data-page="markets">Markets</a>
-      <a href="indicators.html" data-page="indicators">Indicators</a>
-      <a href="calendar.html" data-page="calendar">Calendar</a>
+    <nav id="site-nav" class="nav-links" aria-label="Main">
+      <a href="money-map.html">Money Map</a>
+      <a href="index.html#learn">Learn</a>
+      <a href="index.html#templates">Templates</a>
+      <a href="about.html">About</a>
     </nav>
   </div>
 </header>
 
 <main id="content">
-
-  <section class="hero">
+<section class="hero">
     <div class="wrap">
-      <h1>Finance, made clear.</h1>
-      <p class="sub">A quiet way to move across countries, markets, and the indicators that describe an economy, in language you do not need a textbook for.</p>
-      <div class="search">
-        <label class="sr-only" for="q">Search countries and indicators</label>
-        <input id="q" type="search" placeholder="Search countries and indicators" autocomplete="off" enterkeyhint="search">
-        <div id="search-results" class="results" hidden></div>
-      </div>
-    </div>
-  </section>
-  <section class="section">
-    <div class="wrap">
-      <p class="kicker">Markets</p>
-      <h2>US dollar, one reference day</h2>
-      <p class="lede">How many units of each currency one US dollar bought in the European Central Bank reference rate. Not a live quote.</p>
-      <div id="market-strip" class="strip"></div>
-      <p class="note">The Saudi riyal is not in this Frankfurter response, so no SAR rate is shown. <a href="markets.html">See every pair the feed returned.</a></p>
-    </div>
-  </section>
-  <section class="section">
-    <div class="wrap">
-      <p class="kicker">World snapshot</p>
-      <h2>Seventeen economies, same yardstick</h2>
-      <p class="lede">Germany and France each have their own card. Every figure is the World Bank’s latest observation. If a cell is missing, that country had no value in the row.</p>
-      <div class="country-filter">
-        <label class="sr-only" for="country-q">Filter countries</label>
-        <input id="country-q" type="search" placeholder="Filter countries" autocomplete="off">
-      </div>
-      <div id="snap-grid" class="snap-grid"></div>
-    </div>
-  </section>
-  <section class="section">
-    <div class="wrap">
-      <p class="kicker">Topics</p>
-      <h2>Start with a question</h2>
-      <div class="topic-grid">
-        <a class="card topic" href="indicators.html#gdp"><h3>GDP</h3><p>How large the economy is, per person and in total, and how fast it grew.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#prices"><h3>Prices</h3><p>How fast consumer prices rose over the year.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#jobs"><h3>Jobs</h3><p>Unemployment, and the share of people in the labor force.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#trade"><h3>Trade</h3><p>Exports, imports, and the current account with the rest of the world.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#money"><h3>Money</h3><p>Broad money and real interest rates, only where a latest value exists.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#government"><h3>Government</h3><p>Debt, revenue, taxes, and the budget balance.</p><span class="go">Compare countries</span></a>
-      </div>
-    </div>
-  </section>
-  <section class="section">
-    <div class="wrap">
-      <p class="kicker">A short guide</p>
-      <h2>How to read a number</h2>
-      <div class="read-grid">
-        <article class="card">
-          <span class="idx">1</span>
-          <h3>A share is not a pile of money</h3>
-          <p>When a figure is a percent of GDP, it is a slice of the economy, not a dollar total. A smaller country can have a larger share.</p>
-        </article>
-        <article class="card">
-          <span class="idx">2</span>
-          <h3>Blank means unpublished</h3>
-          <p>If the World Bank’s latest row has no value, the cell says “Not published.” That is not zero, and it is not filled in from an older year.</p>
-        </article>
-        <article class="card">
-          <span class="idx">3</span>
-          <h3>Annual, then one FX day</h3>
-          <p>Country indicators are yearly and can lag. The exchange rates are a single ECB reference day, not a price streaming from a trading screen.</p>
-        </article>
+      <p class="kicker">For expats, Gulf residents, remote workers, and freelancers paid from abroad</p>
+      <h1>Finance, made clear,<br>for money that crosses borders.</h1>
+      <p class="lede">Money concepts you can see, and tools that work in more than one currency. Free, plain, and sourced.</p>
+      <div class="actions">
+        <a class="btn" href="money-map.html">Open Money Map</a>
+        <a class="btn btn-secondary" href="#learn">What’s coming</a>
       </div>
     </div>
   </section>
 
+  <section class="section" aria-labelledby="tool-title">
+    <div class="wrap">
+      <div class="card feature">
+        <div>
+          <span class="badge live">Free tool</span>
+          <h2 id="tool-title">Money Map</h2>
+          <p class="lede">Your savings in one currency, your loan in another, your salary in a third. Add them up and see one net worth in the currency you think in.</p>
+          <a class="btn" href="money-map.html">Try Money Map</a>
+        </div>
+        <ul class="peg-list" aria-label="How Money Map works">
+          <li><strong>Runs in your browser.</strong> Your entries are saved on your device only.</li>
+          <li><strong>Dated rates.</strong> European Central Bank reference rates, with the rate date shown.</li>
+          <li><strong>Gulf pegs, cited.</strong> A pegged currency is included only with a link to its central bank.</li>
+          <li><strong>No sign-up.</strong> No account, no bank connection.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="learn" aria-labelledby="learn-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Learn</p>
+        <h2 id="learn-title">Explainers you can play with</h2>
+        <p class="lede">Short, interactive pages on the money questions that come up when you live, work, or save across borders. The first ones are being written now.</p>
+      </div>
+      <div class="grid grid-2">
+        <article class="card"><span class="badge">Coming soon</span><h3>Why your savings moved when you did nothing</h3><p class="muted">How exchange rates change what your money is worth at home.</p></article>
+        <article class="card"><span class="badge">Coming soon</span><h3>Currency pegs, explained</h3><p class="muted">What it means when a central bank fixes its currency to the US dollar.</p></article>
+        <article class="card"><span class="badge">Coming soon</span><h3>Net worth in two currencies</h3><p class="muted">Why the “real” number depends on which currency you measure in.</p></article>
+        <article class="card"><span class="badge">Coming soon</span><h3>An emergency fund across borders</h3><p class="muted">Which currency to hold it in, and why that question matters.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="templates" aria-labelledby="templates-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Templates</p>
+        <h2 id="templates-title">Spreadsheets built for more than one currency</h2>
+        <p class="lede">Most budgeting tools assume one country and one currency. These won’t. They are in progress and not for sale yet.</p>
+      </div>
+      <div class="grid grid-3">
+        <article class="card"><span class="badge">Coming soon</span><h3>Multi-currency net worth tracker</h3><p class="muted">Track what you own and owe across countries, month by month.</p></article>
+        <article class="card"><span class="badge">Coming soon</span><h3>Multi-currency budget</h3><p class="muted">Budget in the currency you earn, and plan what you send or save at home.</p></article>
+        <article class="card"><span class="badge">Coming soon</span><h3>Freelancer pay-yourself sheet</h3><p class="muted">For irregular income paid in foreign currencies. You enter your own tax set-aside.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="read-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">A short guide</p>
+        <h2 id="read-title">How to read an exchange rate</h2>
+      </div>
+      <div class="grid grid-3">
+        <article class="card"><span class="idx" aria-hidden="true">1</span><h3>Every rate has a date</h3><p>Rates change from day to day. We show the date of every rate we use, so you know how old it is.</p></article>
+        <article class="card"><span class="idx" aria-hidden="true">2</span><h3>A peg is a policy</h3><p>Some currencies are fixed to the US dollar by their central bank. We use a peg only when we can link to that bank’s own page.</p></article>
+        <article class="card"><span class="idx" aria-hidden="true">3</span><h3>Reference is not your rate</h3><p>Reference rates are not what a bank or transfer service will give you. Their rate is usually different, and fees are extra.</p></article>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div>
-        <a class="brand" href="index.html">About Financials</a>
-        <p>Countries, markets, and indicators in plain language.</p>
-        <p><a href="index.html">Home</a> · <a href="markets.html">Markets</a> · <a href="indicators.html">Indicators</a> · <a href="calendar.html">Calendar</a></p>
-      </div>
-      <div>
-        <p>World Bank World Development Indicators (API v2): latest observation per series, plus short GDP-growth and inflation histories on country pages. Exchange rates are European Central Bank reference rates via Frankfurter, for the rate date shown on Markets. They are not live market ticks.</p>
-        <p>The calendar is a snapshot of Forex Factory’s public weekly file. It includes forecast and previous when that file has them, and it has no released actuals. It does not update on its own.</p>
-        <p class="legal"><span id="built-at"></span>Figures are the latest published by those sources. A blank cell means the source did not publish a value.</p>
-      </div>
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href="index.html">AboutFinancials</a>
+      <p>Finance, made clear, for money that crosses borders.</p>
+      <p>Education and tools only. Nothing on this site is financial, tax, or investment advice.</p>
     </div>
+    <nav aria-label="Site">
+      <h2>Site</h2>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="money-map.html">Money Map</a></li>
+        <li><a href="index.html#learn">Learn</a></li>
+        <li><a href="index.html#templates">Templates</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Trust and legal">
+      <h2>Trust</h2>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="editorial.html">Editorial and AI policy</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </nav>
   </div>
 </footer>
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
-
+<script src="js/site.js"></script>
 </body>
 </html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Money Map · Net worth across currencies · AboutFinancials</title>
+  <meta name="description" content="Add what you own and owe in any supported currency and see one net worth in your home currency. Runs in your browser; your entries stay on your device.">
+  <link rel="canonical" href="https://aboutfinancials.com/money-map.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AboutFinancials">
+  <meta property="og:title" content="Money Map · Net worth across currencies · AboutFinancials">
+  <meta property="og:description" content="Add what you own and owe in any supported currency and see one net worth in your home currency. Runs in your browser; your entries stay on your device.">
+  <meta property="og:url" content="https://aboutfinancials.com/money-map.html">
+  <meta name="theme-color" content="#f5f5f7">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">AboutFinancials</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="nav-links" aria-label="Main">
+      <a href="money-map.html" aria-current="page">Money Map</a>
+      <a href="index.html#learn">Learn</a>
+      <a href="index.html#templates">Templates</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main id="content">
+<section class="page-head">
+    <div class="wrap">
+      <p class="kicker">Free tool</p>
+      <h1>Money Map</h1>
+      <p class="lede">Add what you own and what you owe, in whatever currency each one is in. Pick your home currency and see one net worth.</p>
+      <p class="notice info" role="note"><strong>Your data stays on this device.</strong> Entries are saved in your browser’s local storage. Nothing you type here is sent to AboutFinancials or anyone else. <a href="privacy.html">Privacy details</a></p>
+      <noscript><p class="notice error">Money Map needs JavaScript to run. The rest of the site works without it.</p></noscript>
+    </div>
+  </section>
+
+  <div class="wrap mm-layout">
+
+    <section class="card" aria-labelledby="rates-title">
+      <h2 id="rates-title" class="sr-only">Exchange rates</h2>
+      <div id="rate-status" class="rate-meta" role="status" aria-live="polite">Loading exchange rates…</div>
+    </section>
+
+    <section class="card" aria-labelledby="add-title">
+      <h2 id="add-title" style="font-size:24px">Add an item</h2>
+      <form id="entry-form" class="entry-form" novalidate>
+        <div class="full">
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" maxlength="60" placeholder="e.g. Savings account" autocomplete="off" required>
+        </div>
+        <div>
+          <label for="f-type">Type</label>
+          <select id="f-type" name="type">
+            <option value="asset">Asset (you own)</option>
+            <option value="debt">Debt (you owe)</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-amount">Amount</label>
+          <input id="f-amount" name="amount" type="number" inputmode="decimal" min="0" step="any" placeholder="0" required aria-describedby="f-amount-hint">
+        </div>
+        <div>
+          <label for="f-currency">Currency</label>
+          <select id="f-currency" name="currency"></select>
+        </div>
+        <div>
+          <button class="btn" type="submit">Add</button>
+        </div>
+      </form>
+      <p id="f-amount-hint" class="field-hint">Enter amounts as positive numbers. Choose “Debt” for money you owe.</p>
+      <p id="form-error" class="form-error" role="alert"></p>
+    </section>
+
+    <section class="card" aria-labelledby="list-title">
+      <div class="toolbar">
+        <h2 id="list-title" style="font-size:24px;margin:0">Your items</h2>
+        <div class="home-field">
+          <label for="home-currency">Home currency (show totals in)</label>
+          <select id="home-currency"></select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="entries-table" class="stack">
+          <caption class="sr-only">Assets and debts you have added</caption>
+          <thead>
+            <tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col" class="num">Amount</th><th scope="col" class="num">In home currency</th><th scope="col"><span class="sr-only">Actions</span></th></tr>
+          </thead>
+          <tbody id="entries-body"></tbody>
+        </table>
+      </div>
+      <p id="entries-empty" class="empty">No items yet. Add your first asset or debt above.</p>
+      <p><button id="clear-all" class="link-btn" type="button">Clear all items from this browser</button></p>
+    </section>
+
+    <section aria-labelledby="summary-title">
+      <h2 id="summary-title" class="sr-only">Summary</h2>
+      <div class="summary">
+        <div class="card stat"><p class="label">Assets</p><p class="value" id="sum-assets">–</p></div>
+        <div class="card stat"><p class="label">Debts</p><p class="value" id="sum-debts">–</p></div>
+        <div class="card stat"><p class="label">Net worth</p><p class="value" id="sum-net">–</p></div>
+      </div>
+      <p id="summary-note" class="rate-meta" style="margin-top:12px"></p>
+    </section>
+
+    <section class="card" aria-labelledby="bycur-title">
+      <h2 id="bycur-title" style="font-size:24px">Totals by currency</h2>
+      <div class="table-wrap">
+        <table class="stack">
+          <caption class="sr-only">Assets, debts, and net amount for each currency, in that currency and converted to your home currency</caption>
+          <thead>
+            <tr><th scope="col">Currency</th><th scope="col" class="num">Assets</th><th scope="col" class="num">Debts</th><th scope="col" class="num">Net</th><th scope="col" class="num">Net in home currency</th><th scope="col" class="num">Share of assets</th></tr>
+          </thead>
+          <tbody id="bycur-body"></tbody>
+        </table>
+      </div>
+      <p id="bycur-empty" class="empty">Totals appear once you add an item.</p>
+    </section>
+
+    <section class="card" aria-labelledby="chart-title">
+      <h2 id="chart-title" style="font-size:24px">Net amount by currency</h2>
+      <p class="rate-meta">Each bar is one currency’s net amount (assets minus debts), converted to your home currency. Blue is positive, red is negative.</p>
+      <div id="chart" class="chart" role="img" aria-label="Bar chart of net amount by currency"></div>
+    </section>
+
+    <section class="card" aria-labelledby="sources-title">
+      <h2 id="sources-title" style="font-size:24px">Where the rates come from</h2>
+      <p>Most rates are <a href="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html" rel="noopener">European Central Bank euro reference rates</a>, loaded when you open this page through the free <a href="https://frankfurter.dev/" rel="noopener">Frankfurter</a> API. Source: ECB statistics. Conversions between two non-euro currencies are calculated through the euro.</p>
+      <p>The ECB does not publish rates for Gulf currencies. The ones below are fixed to the US dollar by their central bank. We include each one only with a link to that central bank’s own page, and convert it through the ECB’s US dollar rate.</p>
+      <ul id="peg-list" class="peg-list"></ul>
+      <p class="rate-meta">These are reference rates for understanding your position. They are not quotes. A bank or transfer service will use its own rate and may charge fees. The Kuwaiti dinar is not included because it is managed against a basket of currencies rather than a single published peg.</p>
+    </section>
+
+    <section class="card signup" aria-labelledby="signup-title">
+      <span class="badge">Coming soon</span>
+      <h2 id="signup-title" style="font-size:24px">Get updates</h2>
+      <p class="muted">Email updates aren’t switched on yet. This form is disabled and does not collect or send anything.</p>
+      <form id="signup-form" action="#" aria-describedby="signup-off">
+        <fieldset disabled>
+          <legend class="sr-only">Email updates (not available yet)</legend>
+          <div class="signup-row">
+            <div>
+              <label for="signup-email">Email address</label>
+              <input id="signup-email" type="email" placeholder="Not available yet" autocomplete="off">
+            </div>
+            <button class="btn" type="submit" disabled>Coming soon</button>
+          </div>
+        </fieldset>
+        <p id="signup-off" class="field-hint">Disabled. No data is collected.</p>
+      </form>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href="index.html">AboutFinancials</a>
+      <p>Finance, made clear, for money that crosses borders.</p>
+      <p>Education and tools only. Nothing on this site is financial, tax, or investment advice.</p>
+    </div>
+    <nav aria-label="Site">
+      <h2>Site</h2>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="money-map.html">Money Map</a></li>
+        <li><a href="index.html#learn">Learn</a></li>
+        <li><a href="index.html#templates">Templates</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Trust and legal">
+      <h2>Trust</h2>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="editorial.html">Editorial and AI policy</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+<script src="js/site.js"></script>
+<script src="js/money-map-core.js"></script>
+<script src="js/money-map.js"></script>
+</body>
+</html>
