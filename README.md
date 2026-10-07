@@ -14,6 +14,14 @@ Then open http://127.0.0.1:8765
 
 The pages are plain HTML, one shared stylesheet (`css/styles.css`), and browser-side scripts. Search, tables, country pages, history charts, the calendar, Company Intelligence, and the Business Plan Lab all run in the browser. There is no backend. Company briefs use `js/company-data.js` and `js/company.js`; the product direction and publication gates are recorded in [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md).
 
+## Saudi founder hub
+
+- `index.html` is positioned for founders and small business owners in Saudi Arabia.
+- `plan-saudi-restaurant.html` runs the shared Business Plan Lab engine in SAR with VAT-inclusive pricing (default 15%, sourced to ZATCA's VAT guideline, page 8; always user-editable).
+- `founders.html`, `brief.html`, `partners.html` and the custom-plan form on `business-plans.html` collect submissions through `js/forms.js`.
+- **Forms stay closed until an endpoint is set in `js/site-config.js`.** With an empty endpoint the form shows a notice and sends nothing. Any service that accepts a form POST and returns 2xx works (Formspree, Basin, Getform, or a newsletter provider's form endpoint).
+- Pages without data use `js/site.js` for navigation instead of `js/app.js`, so they do not load the 1.4 MB data file.
+
 ## What is real
 
 Figures were copied from named public APIs while this folder was built (4 October 2026, Riyadh). World Bank observations and IMF World Economic Outlook estimates are labelled separately, and a missing cell remains unavailable. See [SOURCES.md](SOURCES.md) for the source and fallback policy.

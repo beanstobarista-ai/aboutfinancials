@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Business Plan Lab · About Financials</title>
-  <meta name="description" content="Source-led business plan structures, operating models, and scenario tools for practical sectors.">
+  <meta name="description" content="Business plan models for Saudi Arabia with VAT-inclusive pricing, break-even and three scenarios, plus custom business plans written for your idea.">
   <meta name="theme-color" content="#f5f5f7">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/styles.css">
@@ -17,12 +17,11 @@
     <a class="brand" href="index.html">About Financials</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
     <nav id="site-nav" class="nav-links" aria-label="Primary">
-      <a href="country.html" data-page="country">Countries</a>
-      <a href="markets.html" data-page="markets">Markets</a>
-      <a href="indicators.html" data-page="indicators">Indicators</a>
-      <a href="calendar.html" data-page="calendar">Calendar</a>
-      <a href="companies.html" data-page="companies">Companies</a>
       <a href="business-plans.html" data-page="plans">Business Plans</a>
+      <a href="founders.html" data-page="founders">Founder Stories</a>
+      <a href="brief.html" data-page="brief">Weekly Brief</a>
+      <a href="country.html" data-page="country">Economies</a>
+      <a href="companies.html" data-page="companies">Companies</a>
     </nav>
   </div>
 </header>
@@ -32,19 +31,35 @@
     <div class="wrap">
       <p class="kicker">Business Plan Lab</p>
       <h1>Test how a business could work</h1>
-      <p class="lede">Sector plans built from operating drivers, local evidence, and transparent assumptions—not prefabricated projections pretending to fit every country.</p>
+      <p class="lede">Business plans for Saudi Arabia built from assumptions you can see and change, with VAT, break-even and three scenarios. Use a free model, or ask us to write the full plan for you.</p>
       <div class="card callout evidence-boundary">
-        <p><strong>Models are not forecasts.</strong> A plan receives numbers only after its location, currency, scale, date and operating assumptions are defined. Until then, the input remains unavailable rather than being filled with an invented industry average.</p>
+        <p><strong>Planning tools, not feasibility studies.</strong> A plan shows what happens if your assumptions hold. We never fill gaps with an invented industry average, so check your figures against real quotes before you commit money or apply for financing.</p>
       </div>
     </div>
   </header>
 
   <section class="section">
     <div class="wrap">
-      <p class="kicker">First model blueprints</p>
-      <h2>Two sectors, two operating systems</h2>
-      <p class="lede">These blueprints show what must be researched and modelled before a plan can produce a defensible result.</p>
+      <p class="kicker">Models</p>
+      <h2>Start with a sector</h2>
+      <p class="lede">Free models that run in your browser. Your inputs are not saved or sent anywhere.</p>
       <div class="plan-grid">
+        <article class="card plan-card plan-card-live">
+          <div class="plan-card-head">
+            <div><p class="evidence-label">Food service · Saudi Arabia</p><h3>Café or restaurant</h3></div>
+            <span class="status-pill">Model available</span>
+          </div>
+          <p>Prices entered including 15% VAT, monthly costs in riyals, break-even customers per day and your own downside and upside cases.</p>
+          <h4>You enter</h4>
+          <ul>
+            <li>Seats, opening days, customers per day and average spend</li>
+            <li>Rent, salaries with GOSI and expat fees, utilities and licences</li>
+            <li>Food, packaging, card and delivery-app costs</li>
+            <li>Fit-out, equipment and a working-capital reserve</li>
+          </ul>
+          <p class="source-ledger">Includes a Saudi checklist covering Balady, Qiwa, GOSI and ZATCA.</p>
+          <a class="primary-link" href="plan-saudi-restaurant.html">Open the Saudi café and restaurant model <span aria-hidden="true">→</span></a>
+        </article>
         <article class="card plan-card">
           <div class="plan-card-head">
             <div><p class="evidence-label">Food and agriculture</p><h3>Broiler chicken farm</h3></div>
@@ -108,6 +123,44 @@
       <p class="method-note">Future downloadable plans will include an assumption register, source links, calculation logic, version date and sensitivity table. Local licensing, tax and safety requirements will be checked for the specified jurisdiction before publication.</p>
     </div>
   </section>
+  <section class="section" id="custom">
+    <div class="wrap">
+      <div class="card signup-card">
+        <p class="kicker">Custom business plan</p>
+        <h2>Have your plan written for you</h2>
+        <p class="lede">Tell us the business, the city and your budget. We write a formatted plan: the idea and market, operations, startup costs, a twelve-month view and downside, base and upside cases, with every assumption listed so you or a lender can check it.</p>
+        <ul class="issue-list">
+          <li><strong>What it is:</strong> a clear, well-structured plan built on your inputs and published sources.</li>
+          <li><strong>What it is not:</strong> a feasibility study or market survey. We do not visit sites or collect supplier quotes.</li>
+          <li><strong>Price:</strong> confirmed after a short intake, before any work starts.</li>
+        </ul>
+        <form class="input-panel" data-form="planRequest" data-success-text="Thank you. We’ll reply within two working days with questions and a price." style="margin-top:18px">
+          <input class="hp-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="field-grid">
+            <label><span>Your name</span><input name="name" type="text" autocomplete="name" required></label>
+            <label><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+            <label><span>Type of business</span><input name="business" type="text" required placeholder="e.g. specialty café, laundry, clinic"></label>
+            <label><span>City</span><input name="city" type="text" autocomplete="address-level2" required></label>
+            <label><span>Approximate budget · SAR <small>optional</small></span><input name="budget" type="text" inputmode="numeric"></label>
+            <label><span>What is the plan for?</span>
+              <select name="purpose" required>
+                <option value="">Select</option>
+                <option value="own-planning">My own planning</option>
+                <option value="partners">Partners or investors</option>
+                <option value="financing">A financing application</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+            <label class="field-wide"><span>Anything else we should know? <small>optional</small></span><textarea name="message"></textarea></label>
+          </div>
+          <div class="form-actions">
+            <button class="primary-button" type="submit">Request a plan</button>
+            <p class="form-status" role="status" hidden></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">
@@ -115,7 +168,7 @@
     <div>
       <a class="brand" href="index.html">About Financials</a>
       <p>Economies, companies, and business economics in plain language.</p>
-      <p><a href="country.html">Countries</a> · <a href="companies.html">Companies</a> · <a href="business-plans.html">Business Plans</a></p>
+      <p><a href="business-plans.html">Business Plans</a> · <a href="founders.html">Founder Stories</a> · <a href="brief.html">Weekly Brief</a> · <a href="partners.html">For partners</a></p>
     </div>
     <div>
       <p>Business-plan evidence will be location- and date-specific. External facts, user assumptions and calculated outputs remain visibly separate.</p>
@@ -125,5 +178,7 @@
 </footer>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script src="js/site-config.js"></script>
+<script src="js/forms.js"></script>
 </body>
 </html>

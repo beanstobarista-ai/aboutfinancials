@@ -2,7 +2,16 @@
 
 ## Product promise
 
-AboutFinancials helps a general reader understand economies, public companies, and practical business economics using traceable primary sources, transparent calculations, and plain-language interpretation.
+AboutFinancials helps people planning or running a business in Saudi Arabia make decisions with numbers they can explain: business plan models, founder stories and a weekly brief, all with traceable sources and transparent calculations. Economies and Company Intelligence remain as supporting reference sections.
+
+## Revenue streams (October 2026 direction)
+
+1. Business plan templates and custom business plans (planning tools, never sold as feasibility studies).
+2. Referral fees from company-setup firms, accountants, banks and insurers.
+3. Weekly brief sponsorships, once the list is established.
+4. Labelled sponsored founder features.
+5. Display advertising (minor).
+6. Cross-referral to Dariba.co for Saudi tax questions.
 
 ## Information architecture
 

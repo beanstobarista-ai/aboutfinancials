@@ -57,4 +57,17 @@ assert.equal(model.calculateScenario(base, "", 2).ok, false);
 assert.equal(model.calculateScenario(base, -101, 2).ok, false);
 assert.equal(model.calculateScenario(base, 10, -31).ok, false);
 
-console.log("Business Plan Lab verification passed: base model, profit/loss, break-even, funding and scenarios.");
+// VAT-inclusive prices (Saudi model): 15% standard rate per ZATCA guideline.
+const vatCase = model.calculate({ ...base, coversPerDay: 120, averageCheck: 46, vatIncludedPct: 15 });
+assert.equal(vatCase.ok, true);
+assert.equal(vatCase.grossReceipts, 120 * 25 * 46);
+assert.ok(Math.abs(vatCase.sales - 120000) < 1e-6);
+assert.ok(Math.abs(vatCase.vatCollected - 18000) < 1e-6);
+assert.ok(Math.abs(vatCase.variableCosts - 42000) < 1e-6);
+assert.ok(Math.abs(vatCase.operatingResult - 28000) < 1e-6);
+assert.ok(Math.abs(vatCase.breakEvenCoversPerDay - (50000 / 0.65) * 1.15 / 25 / 46) < 1e-9);
+assert.equal(model.calculate({ ...base, vatIncludedPct: "" }).vatCollected, 0);
+assert.equal(model.calculate({ ...base, vatIncludedPct: -1 }).ok, false);
+assert.equal(model.calculate({ ...base, vatIncludedPct: 100 }).ok, false);
+
+console.log("Business Plan Lab verification passed: base model, profit/loss, break-even, funding, scenarios and VAT-inclusive pricing.");

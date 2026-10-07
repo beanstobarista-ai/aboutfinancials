@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Finance, made clear · About Financials</title>
-  <meta name="description" content="Economies, companies, and business economics explained through traceable sources.">
+  <title>Plan your business in Saudi Arabia · About Financials</title>
+  <meta name="description" content="Business plan models, founder stories and a weekly brief for people starting and running businesses in Saudi Arabia. Every number shows where it came from.">
   <meta name="theme-color" content="#f5f5f7">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/styles.css">
@@ -17,12 +17,11 @@
     <a class="brand" href="index.html">About Financials</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
     <nav id="site-nav" class="nav-links" aria-label="Primary">
-      <a href="country.html" data-page="country">Countries</a>
-      <a href="markets.html" data-page="markets">Markets</a>
-      <a href="indicators.html" data-page="indicators">Indicators</a>
-      <a href="calendar.html" data-page="calendar">Calendar</a>
-      <a href="companies.html" data-page="companies">Companies</a>
       <a href="business-plans.html" data-page="plans">Business Plans</a>
+      <a href="founders.html" data-page="founders">Founder Stories</a>
+      <a href="brief.html" data-page="brief">Weekly Brief</a>
+      <a href="country.html" data-page="country">Economies</a>
+      <a href="companies.html" data-page="companies">Companies</a>
     </nav>
   </div>
 </header>
@@ -31,82 +30,89 @@
 
   <section class="hero">
     <div class="wrap">
-      <h1>Finance, made clear.</h1>
-      <p class="sub">Understand economies, public companies, and practical business economics through traceable sources and plain language.</p>
-      <div class="search">
-        <label class="sr-only" for="q">Search countries and indicators</label>
-        <input id="q" type="search" placeholder="Search countries and indicators" autocomplete="off" enterkeyhint="search">
-        <div id="search-results" class="results" hidden></div>
+      <p class="kicker">For founders in Saudi Arabia</p>
+      <h1>Plan your business with numbers you can explain.</h1>
+      <p class="sub">Business plan models, real founder stories and a weekly brief for people starting and running a business in the Kingdom. Every number says where it came from.</p>
+      <div class="hero-actions">
+        <a class="button-link primary" href="plan-saudi-restaurant.html">Plan a café or restaurant</a>
+        <a class="button-link secondary" href="brief.html">Get the weekly brief</a>
       </div>
     </div>
   </section>
+
   <section class="section">
     <div class="wrap">
-      <p class="kicker">Three ways to explore</p>
-      <h2>From the economy to the business</h2>
-      <p class="lede">Start with verified country data, read what a company’s filings reveal, or examine the operating drivers behind a business plan.</p>
+      <p class="kicker">Three ways in</p>
+      <h2>From an idea to a plan</h2>
+      <p class="lede">Test the numbers yourself, learn from people who have done it, and keep up with what changes for small businesses each week.</p>
       <div class="topic-grid">
-        <a class="card topic" href="country.html"><h3>Economies</h3><p>Country briefings, indicators, reference exchange rates, and a dated economic-calendar snapshot.</p><span class="go">Explore economies</span></a>
-        <a class="card topic" href="companies.html"><h3>Companies</h3><p>Business models, earnings quality, capital allocation, commitments, risks, and filing context.</p><span class="go">Open Company Intelligence</span></a>
-        <a class="card topic" href="business-plans.html"><h3>Business plans</h3><p>Sector models built from local evidence, operating drivers, and transparent assumptions.</p><span class="go">Open the Business Plan Lab</span></a>
+        <a class="card topic" href="business-plans.html"><h3>Business Plan Lab</h3><p>Sector models with VAT-inclusive pricing, break-even and your own downside and upside cases. Start with cafés and restaurants.</p><span class="go">Open the Business Plan Lab</span></a>
+        <a class="card topic" href="founders.html"><h3>Founder stories</h3><p>How Saudi businesses actually started: what it cost, what took longer than planned, and what the founders would do differently.</p><span class="go">Read and share stories</span></a>
+        <a class="card topic" href="brief.html"><h3>Weekly brief</h3><p>One email a week: what changed for small businesses in Saudi Arabia, one founder story, and one cost breakdown.</p><span class="go">See what’s inside</span></a>
       </div>
     </div>
   </section>
+
   <section class="section">
     <div class="wrap">
-      <p class="kicker">Markets</p>
-      <h2>US dollar, one reference day</h2>
-      <p class="lede">How many units of each currency one US dollar bought in the European Central Bank reference rate. Not a live quote.</p>
-      <div id="market-strip" class="strip"></div>
-      <p class="note">The Saudi riyal is not in this Frankfurter response, so no SAR rate is shown. <a href="markets.html">See every pair the feed returned.</a></p>
-    </div>
-  </section>
-  <section class="section">
-    <div class="wrap">
-      <p class="kicker">World snapshot</p>
-      <h2>Featured economies, same yardstick</h2>
-      <p class="lede">A concise snapshot of seventeen economies. Every figure is the World Bank’s latest observation; missing values remain unpublished, never estimated. <a href="country.html">Browse the complete country directory.</a></p>
-      <div class="country-filter">
-        <label class="sr-only" for="country-q">Filter countries</label>
-        <input id="country-q" type="search" placeholder="Filter countries" autocomplete="off">
-      </div>
-      <div id="snap-grid" class="snap-grid"></div>
-    </div>
-  </section>
-  <section class="section">
-    <div class="wrap">
-      <p class="kicker">Topics</p>
-      <h2>Start with a question</h2>
-      <div class="topic-grid">
-        <a class="card topic" href="indicators.html#gdp"><h3>GDP</h3><p>How large the economy is, per person and in total, and how fast it grew.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#prices"><h3>Prices</h3><p>How fast consumer prices rose over the year.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#jobs"><h3>Jobs</h3><p>Unemployment, and the share of people in the labor force.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#trade"><h3>Trade</h3><p>Exports, imports, and the current account with the rest of the world.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#money"><h3>Money</h3><p>Broad money and real interest rates, only where a latest value exists.</p><span class="go">Compare countries</span></a>
-        <a class="card topic" href="indicators.html#government"><h3>Government</h3><p>Debt, revenue, taxes, and the budget balance.</p><span class="go">Compare countries</span></a>
-      </div>
-    </div>
-  </section>
-  <section class="section">
-    <div class="wrap">
-      <p class="kicker">A short guide</p>
-      <h2>How to read a number</h2>
+      <p class="kicker">How our plans work</p>
+      <h2>Plans that show their working</h2>
       <div class="read-grid">
         <article class="card">
           <span class="idx">1</span>
-          <h3>A share is not a pile of money</h3>
-          <p>When a figure is a percent of GDP, it is a slice of the economy, not a dollar total. A smaller country can have a larger share.</p>
+          <h3>Your assumptions stay visible</h3>
+          <p>Rent, staffing, prices and customer numbers are inputs you can see and change. Nothing is hidden inside a template.</p>
         </article>
         <article class="card">
           <span class="idx">2</span>
-          <h3>Unavailable is not zero</h3>
-          <p>We use the latest non-empty World Bank observation and keep its year visible. A compatible IMF estimate can fill only a documented gap and is labelled; otherwise the figure stays unavailable.</p>
+          <h3>Three cases, not one</h3>
+          <p>Every plan shows a downside, a base and an upside case, so you can see what happens when sales are slower than hoped.</p>
         </article>
         <article class="card">
           <span class="idx">3</span>
-          <h3>Annual, then one FX day</h3>
-          <p>Country indicators are yearly and can lag. The exchange rates are a single ECB reference day, not a price streaming from a trading screen.</p>
+          <h3>Saudi rules built in</h3>
+          <p>Menu prices include VAT the way customers pay them, and the checklists cover Balady, Qiwa, GOSI and ZATCA.</p>
         </article>
+      </div>
+      <div class="card callout evidence-boundary">
+        <p><strong>Planning tools, not feasibility studies.</strong> Our models help you think clearly about a business. They are only as accurate as the figures you enter, so check them against real quotes before you commit money or apply for financing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two-col">
+      <div class="card signup-card">
+        <p class="kicker">Weekly brief</p>
+        <h2>One useful email a week</h2>
+        <p class="lede">Saudi small-business news explained, one founder story and one cost breakdown. Free.</p>
+        <form class="input-panel" data-form="newsletter" data-success-text="You’re on the list. The next brief will arrive in your inbox." data-closed-text="Sign-ups open soon. Nothing you type here is sent or stored.">
+          <input class="hp-field" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <input type="hidden" name="source" value="home">
+          <label><span>Email address</span><input name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+          <div class="form-actions">
+            <button class="primary-button" type="submit">Subscribe</button>
+            <p class="form-status" role="status" hidden></p>
+          </div>
+        </form>
+      </div>
+      <div class="card signup-card">
+        <p class="kicker">Custom plans</p>
+        <h2>Need a plan written for you?</h2>
+        <p class="lede">Tell us the business, the city and your budget. We turn it into a formatted plan with clear assumptions and three scenarios.</p>
+        <a class="button-link primary" href="business-plans.html#custom">Request a custom plan</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="kicker">Tax and the rest</p>
+      <h2>More for Saudi businesses</h2>
+      <div class="topic-grid">
+        <a class="card topic" href="https://www.dariba.co/" rel="noopener"><h3>Tax questions</h3><p>VAT, Zakat, income tax and e-invoicing for Saudi businesses, explained by tax specialists at Dariba.co.</p><span class="go">Visit Dariba.co</span></a>
+        <a class="card topic" href="country.html"><h3>Economies</h3><p>Country indicators, reference exchange rates and a dated economic calendar, each with its official source.</p><span class="go">Explore economies</span></a>
+        <a class="card topic" href="partners.html"><h3>For partners</h3><p>Banks, service firms and software companies that want to reach Saudi founders: sponsorships and referral partnerships.</p><span class="go">Work with us</span></a>
       </div>
     </div>
   </section>
@@ -114,23 +120,21 @@
 </main>
 
 <footer class="site-footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div>
-        <a class="brand" href="index.html">About Financials</a>
-        <p>Economies, companies, and business economics in plain language.</p>
-        <p><a href="country.html">Countries</a> · <a href="markets.html">Markets</a> · <a href="indicators.html">Indicators</a> · <a href="calendar.html">Calendar</a> · <a href="companies.html">Companies</a> · <a href="business-plans.html">Business Plans</a></p>
-      </div>
-      <div>
-        <p>World Bank World Development Indicators (API v2): latest non-empty observation per series, plus short GDP-growth and inflation histories on country pages. Definition-compatible IMF World Economic Outlook estimates may fill selected inflation and current-account gaps and are labelled. Exchange rates are European Central Bank reference rates via Frankfurter, for the rate date shown on Markets. They are not live market ticks.</p>
-        <p>The calendar is a snapshot of Forex Factory’s public weekly file. It includes forecast and previous when that file has them, and it has no released actuals. It does not update on its own.</p>
-        <p class="legal"><span id="built-at"></span>Every displayed figure keeps its source, source series, observation year, status, and exact value. Unavailable is not zero.</p>
-      </div>
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href="index.html">About Financials</a>
+      <p>Business plans, founder stories and a weekly brief for people building businesses in Saudi Arabia.</p>
+      <p><a href="business-plans.html">Business Plans</a> · <a href="founders.html">Founder Stories</a> · <a href="brief.html">Weekly Brief</a> · <a href="partners.html">For partners</a></p>
+    </div>
+    <div>
+      <p>Data: <a href="country.html">Countries</a> · <a href="markets.html">Markets</a> · <a href="indicators.html">Indicators</a> · <a href="calendar.html">Calendar</a> · <a href="companies.html">Companies</a></p>
+      <p class="legal">Our models are planning aids. They are not feasibility studies or legal, tax, investment or lending advice, and no result guarantees commercial performance or financing.</p>
     </div>
   </div>
 </footer>
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
+<script src="js/site.js"></script>
+<script src="js/site-config.js"></script>
+<script src="js/forms.js"></script>
 
 </body>
 </html>

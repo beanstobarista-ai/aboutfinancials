@@ -4,7 +4,8 @@
   var form = document.getElementById("restaurant-model");
   if (!model || !form) return;
 
-  var currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  var currencyCode = form.getAttribute("data-currency") || "USD";
+  var currency = new Intl.NumberFormat("en-US", { style: "currency", currency: currencyCode, maximumFractionDigits: 0 });
   var decimal = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
   var percent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 1 });
   var errorsBox = document.getElementById("form-errors");
@@ -32,6 +33,7 @@
     }
     var friendly = errors.map(function (message) {
       return message
+        .replace("vatIncludedPct", "VAT included in prices")
         .replace("daysPerMonth", "Operating days per month")
         .replace("coversPerDay", "Customer covers per day")
         .replace("averageCheck", "Average check")
@@ -52,7 +54,7 @@
   }
 
   function resetOutputs() {
-    ["result-sales", "result-profit", "result-margin", "result-break-even-sales", "result-break-even-covers", "result-seat-use", "result-funding"].forEach(function (id) { setText(id, "Unavailable"); });
+    ["result-sales", "result-vat", "result-profit", "result-margin", "result-break-even-sales", "result-break-even-covers", "result-seat-use", "result-funding"].forEach(function (id) { setText(id, "Unavailable"); });
     setText("result-context", "Enter all required assumptions to calculate the model.");
     var bridge = document.querySelectorAll("#calculation-bridge dd");
     bridge.forEach(function (node) { node.textContent = "Unavailable"; });
@@ -101,8 +103,9 @@
     showErrors([]);
     var location = [input.city.trim(), input.state.trim()].join(", ");
     var name = input.planName.trim();
-    setText("result-context", (name ? name + " · " : "") + location + " · USD per month");
+    setText("result-context", (name ? name + " · " : "") + location + " · " + currencyCode + " per month" + (result.vatIncludedPct ? ", sales net of VAT" : ""));
     setText("result-sales", money(result.sales));
+    setText("result-vat", money(result.vatCollected));
     setText("result-profit", money(result.operatingResult));
     setText("result-margin", pct(result.operatingMargin));
     setText("result-break-even-sales", money(result.breakEvenSales));

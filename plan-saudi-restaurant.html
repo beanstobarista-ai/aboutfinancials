@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saudi Café and Restaurant Business Plan Model · About Financials</title>
+  <meta name="description" content="Plan a café or restaurant in Saudi Arabia: VAT-inclusive pricing, monthly economics, break-even and your own downside and upside cases, all from assumptions you control.">
+  <meta name="theme-color" content="#f5f5f7">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="plans">
+
+<a class="skip" href="#content">Skip to content</a>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html">About Financials</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="nav-links" aria-label="Primary">
+      <a href="business-plans.html" data-page="plans">Business Plans</a>
+      <a href="founders.html" data-page="founders">Founder Stories</a>
+      <a href="brief.html" data-page="brief">Weekly Brief</a>
+      <a href="country.html" data-page="country">Economies</a>
+      <a href="companies.html" data-page="companies">Companies</a>
+    </nav>
+  </div>
+</header>
+
+<main id="content">
+  <header class="page-head plan-model-head">
+    <div class="wrap">
+      <p class="kicker">Business Plan Lab · Saudi Arabia</p>
+      <h1>Café and restaurant business plan</h1>
+      <p class="lede">Turn your own location, demand, cost and investment assumptions into a monthly plan for a café or restaurant in Saudi Arabia. Menu prices are entered the way customers see them, including VAT. Every output shows its formula.</p>
+      <div class="plan-status-row">
+        <span class="status-pill amber">Your assumptions</span>
+        <span class="status-pill dark">Calculated outputs</span>
+        <span class="status-pill">Official context</span>
+      </div>
+      <div class="card callout evidence-boundary">
+        <p><strong>A planning tool, not a feasibility study.</strong> The result is only as good as the numbers you enter. It excludes Zakat or income tax, loan repayments, depreciation, pre-opening losses and seasonality. Check your figures against real quotes, a lease offer and current government fees before you rely on them or show them to a lender.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="section model-workspace" aria-labelledby="model-title">
+    <div class="wrap">
+      <div class="section-heading-row">
+        <div>
+          <p class="kicker">Working model</p>
+          <h2 id="model-title">Build the monthly economics</h2>
+          <p class="lede">All fields are required unless marked optional. Values stay in this browser tab and are not saved or sent anywhere.</p>
+        </div>
+        <div class="model-actions">
+          <button class="secondary-button" id="clear-plan" type="button">Clear inputs</button>
+          <button class="primary-button" id="print-plan" type="button">Print plan</button>
+        </div>
+      </div>
+
+      <form id="restaurant-model" data-currency="SAR" novalidate>
+        <div class="model-layout">
+          <div class="model-inputs">
+            <fieldset class="card input-panel">
+              <legend>1. Location and format</legend>
+              <p class="panel-note">Location tells you which municipality and rules to check. It does not fill in local costs.</p>
+              <div class="field-grid">
+                <label><span>Plan name <small>optional</small></span><input name="planName" type="text" autocomplete="organization" placeholder="Enter a working name"></label>
+                <label><span>City</span><input name="city" type="text" autocomplete="address-level2" required placeholder="e.g. Riyadh, Jeddah, Dammam"></label>
+                <label><span>Region</span><input name="state" type="text" autocomplete="address-level1" required placeholder="e.g. Riyadh Region"></label>
+                <label><span>Format</span>
+                  <select name="format" required>
+                    <option value="">Select format</option>
+                    <option value="cafe">Café or coffee shop</option>
+                    <option value="full-service">Full-service restaurant</option>
+                    <option value="quick-service">Quick-service or takeaway</option>
+                    <option value="other">Other food-service format</option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card input-panel">
+              <legend>2. Capacity and sales</legend>
+              <p class="panel-note">Count every paying customer or order as one cover, including delivery orders. Currency is Saudi riyals.</p>
+              <div class="field-grid">
+                <label><span>Seats</span><input name="seats" type="number" min="1" step="1" inputmode="numeric" required placeholder="Enter seats"></label>
+                <label><span>Operating days per month</span><input name="daysPerMonth" type="number" min="1" max="31" step="1" inputmode="numeric" required placeholder="Enter days"></label>
+                <label><span>Customers or orders per day</span><input name="coversPerDay" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="Enter count"></label>
+                <label><span>Average spend per customer, incl. VAT · SAR</span><input name="averageCheck" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label class="field-wide"><span>VAT included in your prices · %</span><input name="vatIncludedPct" type="number" min="0" max="99.99" step="0.01" inputmode="decimal" required value="15"><small>15% is the standard rate stated in ZATCA’s VAT guideline (see sources below). Enter 0 if you are not VAT-registered and charge no VAT.</small></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card input-panel">
+              <legend>3. Monthly costs</legend>
+              <p class="panel-note">Enter costs without VAT if you are VAT-registered and reclaim input VAT. Use quotes, lease terms and your staffing plan. Enter zero only when a cost truly does not apply.</p>
+              <div class="field-grid">
+                <label><span>Rent and service charges · SAR per month</span><input name="rent" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Salaries, GOSI and expat government fees · SAR</span><input name="payroll" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Electricity, water and internet · SAR</span><input name="utilities" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Insurance, licences and permits, per month · SAR</span><input name="insurancePermits" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Marketing, accounting and admin · SAR</span><input name="marketingAdmin" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+              </div>
+              <div class="field-grid field-grid-three percentage-fields">
+                <label><span>Food, drink and packaging · % of sales</span><input name="foodCostPct" type="number" min="0" max="100" step="0.01" inputmode="decimal" required placeholder="Enter percent"></label>
+                <label><span>Card and delivery-app fees · % of sales</span><input name="transactionPct" type="number" min="0" max="100" step="0.01" inputmode="decimal" required placeholder="Enter percent"></label>
+                <label><span>Other variable costs · % of sales</span><input name="otherVariablePct" type="number" min="0" max="100" step="0.01" inputmode="decimal" required placeholder="Enter percent"></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card input-panel">
+              <legend>4. Opening funding</legend>
+              <div class="field-grid">
+                <label><span>Fit-out, equipment, licences and pre-opening · SAR</span><input name="openingInvestment" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+                <label><span>Working-capital reserve · SAR</span><input name="workingCapital" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="Enter amount"></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="card input-panel">
+              <legend>5. Your stress-test changes <small>optional</small></legend>
+              <p class="panel-note">Enter changes relative to the base case. These are your scenarios, not AboutFinancials forecasts.</p>
+              <div class="scenario-input-grid">
+                <div>
+                  <h3>Downside</h3>
+                  <label><span>Sales change · %</span><input name="downsideSalesPct" type="number" max="0" step="0.01" inputmode="decimal" placeholder="Enter zero or a negative percent"></label>
+                  <label><span>Food-cost change · percentage points</span><input name="downsideFoodPp" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Enter zero or a positive change"></label>
+                </div>
+                <div>
+                  <h3>Upside</h3>
+                  <label><span>Sales change · %</span><input name="upsideSalesPct" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Enter zero or a positive percent"></label>
+                  <label><span>Food-cost change · percentage points</span><input name="upsideFoodPp" type="number" max="0" step="0.01" inputmode="decimal" placeholder="Enter zero or a negative change"></label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+          <aside class="model-results" aria-label="Calculated results">
+            <div class="card results-panel" id="results-panel" aria-live="polite">
+              <p class="evidence-label">Calculated from your inputs</p>
+              <h2>Base case</h2>
+              <p class="result-context" id="result-context">Enter all required assumptions to calculate the model.</p>
+              <div class="result-grid">
+                <div><span>Monthly sales, net of VAT</span><strong id="result-sales">Unavailable</strong></div>
+                <div><span>VAT collected for ZATCA</span><strong id="result-vat">Unavailable</strong></div>
+                <div><span>Monthly operating result</span><strong id="result-profit">Unavailable</strong></div>
+                <div><span>Operating margin</span><strong id="result-margin">Unavailable</strong></div>
+                <div><span>Break-even sales, net of VAT</span><strong id="result-break-even-sales">Unavailable</strong></div>
+                <div><span>Break-even customers per day</span><strong id="result-break-even-covers">Unavailable</strong></div>
+                <div><span>Customers per seat per day</span><strong id="result-seat-use">Unavailable</strong></div>
+                <div><span>Opening funding entered</span><strong id="result-funding">Unavailable</strong></div>
+              </div>
+              <p class="result-warning" id="result-warning" hidden></p>
+            </div>
+
+            <div class="card formula-panel">
+              <p class="evidence-label">Transparent calculation</p>
+              <h3>Monthly bridge</h3>
+              <dl id="calculation-bridge">
+                <div><dt>Sales, net of VAT</dt><dd>Unavailable</dd></div>
+                <div><dt>Less variable costs</dt><dd>Unavailable</dd></div>
+                <div><dt>Contribution</dt><dd>Unavailable</dd></div>
+                <div><dt>Less fixed costs</dt><dd>Unavailable</dd></div>
+                <div class="bridge-total"><dt>Operating result</dt><dd>Unavailable</dd></div>
+              </dl>
+            </div>
+          </aside>
+        </div>
+        <div id="form-errors" class="card form-errors" role="alert" hidden></div>
+      </form>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="scenario-title">
+    <div class="wrap">
+      <p class="kicker">Sensitivity</p>
+      <h2 id="scenario-title">Your downside, base and upside cases</h2>
+      <p class="lede">A plan with one outcome is a wish. The table appears after the base case is complete; downside and upside stay empty until you enter their changes.</p>
+      <div class="card scenario-table-card">
+        <div class="table-scroll">
+          <table id="scenario-table">
+            <caption>Scenario changes are your assumptions. Results are calculations, not observed data or forecasts. Sales are net of VAT.</caption>
+            <thead><tr><th>Case</th><th>Sales assumption</th><th>Food cost</th><th>Monthly sales</th><th>Operating result</th><th>Margin</th></tr></thead>
+            <tbody>
+              <tr data-case="downside"><th>Downside</th><td colspan="5">Enter downside changes to calculate.</td></tr>
+              <tr data-case="base"><th>Base</th><td colspan="5">Complete the required inputs to calculate.</td></tr>
+              <tr data-case="upside"><th>Upside</th><td colspan="5">Enter upside changes to calculate.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="formula-title">
+    <div class="wrap">
+      <p class="kicker">Method</p>
+      <h2 id="formula-title">What the model calculates</h2>
+      <div class="framework-grid model-method-grid">
+        <article class="card"><h3>Sales, net of VAT</h3><p>Customers per day × operating days × average spend, divided by (1 + VAT rate). The VAT part belongs to ZATCA, not to you, so it is shown separately.</p></article>
+        <article class="card"><h3>Contribution</h3><p>Net sales less food, card and delivery-app fees and other variable costs.</p></article>
+        <article class="card"><h3>Operating result</h3><p>Contribution less the five monthly fixed costs. This is before Zakat or income tax, financing and depreciation. It is not cash flow.</p></article>
+        <article class="card"><h3>Break-even sales</h3><p>Total fixed costs ÷ contribution-margin ratio. Unavailable when the ratio is zero or negative.</p></article>
+        <article class="card"><h3>Break-even customers</h3><p>Break-even net sales × (1 + VAT rate) ÷ operating days ÷ average spend.</p></article>
+        <article class="card"><h3>Opening funding</h3><p>Opening investment plus working-capital reserve. Financing costs are not included.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="research-title">
+    <div class="wrap">
+      <p class="kicker">Before relying on the result</p>
+      <h2 id="research-title">Check these six things in Saudi Arabia</h2>
+      <div class="research-grid evidence-checklist">
+        <article class="card"><span>01</span><h3>Demand</h3><p>Footfall at the actual site, competitor prices nearby, delivery-app demand in your zone, and a daily customer count you can explain.</p></article>
+        <article class="card"><span>02</span><h3>Site</h3><p>A written lease offer, permitted commercial use, fit-out quotations, and civil-defence and municipal requirements for the unit.</p></article>
+        <article class="card"><span>03</span><h3>Staff</h3><p>Saudization requirements for your activity and size on Qiwa, GOSI contributions, and work permit and residency costs for any expatriate staff.</p></article>
+        <article class="card"><span>04</span><h3>Menu</h3><p>Recipe costs from supplier quotes, waste, packaging, and delivery-app commission terms.</p></article>
+        <article class="card"><span>05</span><h3>Licences and tax</h3><p>Commercial registration, the municipal licence through Balady, food-safety requirements, VAT registration and e-invoicing obligations with ZATCA.</p></article>
+        <article class="card"><span>06</span><h3>Funding</h3><p>Deposits, fit-out schedule, contingency, pre-opening salaries, and whether a financing or support programme applies to you.</p></article>
+      </div>
+      <p class="method-note"><strong>After the operating result comes tax.</strong> Zakat applies to Saudi and GCC owners and corporate income tax to foreign ownership, each with its own base. <a href="https://www.dariba.co/" rel="noopener">Dariba.co explains Saudi VAT, Zakat and income tax</a> in plain language.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="custom-title">
+    <div class="wrap">
+      <div class="card callout evidence-boundary">
+        <p><strong id="custom-title">Want this written up as a full business plan?</strong> We can turn your assumptions into a formatted plan with a narrative, three scenarios and a twelve-month view. <a href="business-plans.html#custom">Request a custom plan</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section source-register" aria-labelledby="sources-title">
+    <div class="wrap">
+      <p class="kicker">Source and methodology ledger</p>
+      <h2 id="sources-title">Official context used in this model</h2>
+      <p class="lede">One value comes from an official source: the default 15% VAT rate. The other sources are where to check rules and fees; they do not supply any of the numbers you enter.</p>
+      <article class="card source-card">
+        <a href="https://zatca.gov.sa/en/HelpCenter/guidelines/Documents/Guideline-on-Imports-and-Exports-under-VAT-Provision.pdf" rel="noopener">ZATCA · Guideline on Imports and Exports under VAT Provision</a>
+        <p>Publisher: Zakat, Tax and Customs Authority · Page 8 states that taxable persons charge VAT at a rate of 15% where the standard rate applies · Retrieved 7 October 2026 · Used for: default value of the VAT field, which you can change · Missing-data behavior: none; the field is always user-editable.</p>
+      </article>
+      <article class="card source-card">
+        <a href="https://balady.gov.sa/en" rel="noopener">Balady · Ministry of Municipalities and Housing e-services</a>
+        <p>Scope: municipal commercial licences and related requirements · Retrieved 7 October 2026 · Units: no fee imported · Missing-data behavior: your licence cost input remains required.</p>
+      </article>
+      <article class="card source-card">
+        <a href="https://qiwa.sa/en" rel="noopener">Qiwa · Ministry of Human Resources and Social Development platform</a>
+        <p>Scope: Saudization (Nitaqat) status, work permits and labour services · Retrieved 7 October 2026 · Units: no quota or fee imported · Missing-data behavior: your staffing and payroll inputs remain required.</p>
+      </article>
+      <article class="card source-card">
+        <a href="https://www.gosi.gov.sa/en" rel="noopener">GOSI · General Organization for Social Insurance</a>
+        <p>Scope: employer social-insurance contributions · Retrieved 7 October 2026 · Units: no rate imported · Missing-data behavior: include contributions in your payroll input.</p>
+      </article>
+      <article class="card source-card">
+        <a href="https://mc.gov.sa/en" rel="noopener">Ministry of Commerce</a>
+        <p>Scope: commercial registration · Retrieved 7 October 2026 · Units: no fee imported · Missing-data behavior: include registration costs in your opening investment.</p>
+      </article>
+      <article class="card source-card">
+        <a href="https://www.monshaat.gov.sa/en" rel="noopener">Monsha’at · Small and Medium Enterprises General Authority</a>
+        <p>Scope: SME support and financing programmes · Retrieved 7 October 2026 · Units: none used · Missing-data behavior: contributes no financial value.</p>
+      </article>
+      <p class="method-note"><strong>Usage.</strong> These are public Saudi government webpages and documents linked for attribution and context. The model does not reproduce an official dataset or imply endorsement by any authority. Fees, quotas and rates change; confirm the current figures on the official platform before relying on them.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href="index.html">About Financials</a>
+      <p>Business plans, founder stories and a weekly brief for people building businesses in Saudi Arabia.</p>
+      <p><a href="business-plans.html">Business Plans</a> · <a href="founders.html">Founder Stories</a> · <a href="brief.html">Weekly Brief</a> · <a href="partners.html">For partners</a></p>
+    </div>
+    <div>
+      <p>This model separates official context, your assumptions and calculated outputs. It is not a feasibility study, and it is not legal, tax, investment or lending advice.</p>
+      <p class="legal">No result is a guarantee of commercial performance or financing.</p>
+    </div>
+  </div>
+</footer>
+<script src="js/site.js"></script>
+<script src="js/business-plan-model.js"></script>
+<script src="js/business-plan.js"></script>
+</body>
+</html>

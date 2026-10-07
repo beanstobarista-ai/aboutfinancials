@@ -20,7 +20,7 @@
   function validate(input) {
     var errors = [];
     if (!String(input.city || "").trim()) errors.push("City is required.");
-    if (!String(input.state || "").trim()) errors.push("State or territory is required.");
+    if (!String(input.state || "").trim()) errors.push("Region, state or territory is required.");
     if (!String(input.format || "").trim()) errors.push("Restaurant format is required.");
 
     REQUIRED_NUMERIC_FIELDS.forEach(function (field) {
@@ -33,6 +33,10 @@
       if (value != null && value <= 0) errors.push(field + " must be greater than zero.");
     });
     if (finiteNumber(input.daysPerMonth) > 31) errors.push("daysPerMonth cannot exceed 31.");
+    if (input.vatIncludedPct != null && String(input.vatIncludedPct).trim() !== "") {
+      var vat = finiteNumber(input.vatIncludedPct);
+      if (vat == null || vat < 0 || vat >= 100) errors.push("vatIncludedPct must be between 0 and 100.");
+    }
 
     ["rent", "payroll", "utilities", "insurancePermits", "marketingAdmin", "foodCostPct", "transactionPct", "otherVariablePct", "openingInvestment", "workingCapital"].forEach(function (field) {
       var value = finiteNumber(input[field]);
@@ -54,7 +58,13 @@
 
     var numbers = {};
     REQUIRED_NUMERIC_FIELDS.forEach(function (field) { numbers[field] = finiteNumber(input[field]); });
-    var sales = numbers.coversPerDay * numbers.daysPerMonth * numbers.averageCheck;
+    // Optional: the average check includes VAT at this rate (e.g. Saudi menu prices).
+    // Sales are then measured net of VAT, and the VAT collected is shown separately.
+    var vatIncludedPct = finiteNumber(input.vatIncludedPct) || 0;
+    var vatFactor = 1 + vatIncludedPct / 100;
+    var grossReceipts = numbers.coversPerDay * numbers.daysPerMonth * numbers.averageCheck;
+    var sales = grossReceipts / vatFactor;
+    var vatCollected = grossReceipts - sales;
     var variableRate = (numbers.foodCostPct + numbers.transactionPct + numbers.otherVariablePct) / 100;
     var variableCosts = sales * variableRate;
     var contribution = sales - variableCosts;
@@ -63,12 +73,15 @@
     var operatingMargin = sales === 0 ? null : operatingResult / sales;
     var contributionMargin = 1 - variableRate;
     var breakEvenSales = contributionMargin > 0 ? fixedCosts / contributionMargin : null;
-    var breakEvenCoversPerDay = breakEvenSales == null ? null : breakEvenSales / numbers.daysPerMonth / numbers.averageCheck;
+    var breakEvenCoversPerDay = breakEvenSales == null ? null : breakEvenSales * vatFactor / numbers.daysPerMonth / numbers.averageCheck;
     var fundingEntered = numbers.openingInvestment + numbers.workingCapital;
 
     return {
       ok: true,
       inputs: numbers,
+      vatIncludedPct: vatIncludedPct,
+      grossReceipts: grossReceipts,
+      vatCollected: vatCollected,
       sales: sales,
       variableRate: variableRate,
       variableCosts: variableCosts,
