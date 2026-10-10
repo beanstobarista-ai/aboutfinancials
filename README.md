@@ -12,7 +12,7 @@ python3 -m http.server 8765
 
 Then open http://127.0.0.1:8765
 
-The pages are plain HTML, one shared stylesheet (`css/styles.css`), and browser-side scripts. Search, tables, country pages, history charts, the calendar, Company Intelligence, and the Business Plan Lab all run in the browser. There is no backend. Company briefs use `js/company-data.js` and `js/company.js`; the product direction and publication gates are recorded in [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md).
+The pages are plain HTML, one shared stylesheet (`styles.css` in the site root, because CloudPanel's file manager can't open the `css/` folder), and browser-side scripts. Search, tables, country pages, history charts, the calendar, Company Intelligence, and the Business Plan Lab all run in the browser. There is no backend. Company briefs use `js/company-data.js` and `js/company.js`; the product direction and publication gates are recorded in [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md).
 
 ## Saudi founder hub
 
